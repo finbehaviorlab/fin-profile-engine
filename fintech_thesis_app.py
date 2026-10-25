@@ -3,12 +3,12 @@ import random
 import sqlite3
 
 # ==========================================
-# 1. ΒΑΣΙΚΗ ΡΥΘΜΙΣΗ ΣΕΛΙΔΑΣ (ΑΥΣΤΗΡΑ ΠΡΩΤΗ)
+# 1. ΒΑΣΙΚΗ ΡΥΘΜΙΣΗ ΣΕΛΙΔΑΣ (ΠΡΩΤΗ ΕΝΤΟΛΗ)
 # ==========================================
 st.set_page_config(page_title="FinLit & Behavioral App", page_icon="💡", layout="centered")
 
 # ==========================================
-# 2. ΑΠΟΚΡΥΨΗ ΟΛΩΝ ΤΩΝ ΜΕΝΟΥ, HEADERS, GITHUB LINKS & ANCHOR ICONS
+# 2. ΑΠΟΚΡΥΨΗ ΜΕΝΟΥ, HEADERS, GITHUB & ANCHORS
 # ==========================================
 hide_streamlit_style = """
     <style>
@@ -20,7 +20,6 @@ hide_streamlit_style = """
     div[class^="viewerBadge_"] {display: none !important;}
     button[title="View app in GitHub"] {display: none !important;}
     a[href*="github.com"] {display: none !important;}
-    /* Απόκρυψη του link icon δίπλα στους τίτλους */
     [data-testid="stHeaderActionElements"] {display: none !important;}
     a.anchorjs-link {display: none !important;}
     </style>
@@ -61,7 +60,6 @@ if not st.session_state.authenticated:
             st.error("❌ Invalid PIN. Please check your credentials.")
             
     st.stop()
-# ==========================================
 
 # ==========================================
 # 4. ΡΥΘΜΙΣΗ ΒΑΣΗΣ ΔΕΔΟΜΕΝΩΝ (SQLITE)
@@ -166,7 +164,7 @@ if st.session_state.step == "welcome":
         st.session_state.step = "level_1_cards"
         st.rerun()
 
-# Οθόνη 2: Level 1 - Learning Cards (Financial Foundations)
+# Οθόνη 2: Level 1 - Theory
 elif st.session_state.step == "level_1_cards":
     st.header("Level 1: Financial Foundations")
     st.info("💡 **Core Rules of Cash Flow & Liquidity**")
@@ -181,36 +179,59 @@ elif st.session_state.step == "level_1_cards":
     if st.button("Proceed to Knowledge Checkpoint (+30 XP)", use_container_width=True):
         st.session_state.xp += 30
         st.session_state.step = "level_1_quiz"
+        st.session_state.pop("l1_status", None)
         st.rerun()
 
-# Οθόνη 3: Level 1 - Quiz Checkpoint
+# Οθόνη 3: Level 1 - Quiz Checkpoint (με Feedback & Try Again)
 elif st.session_state.step == "level_1_quiz":
+    st.caption("Checkpoint 1 of 3 | Financial Foundations")
     st.header("Level 1 Checkpoint: Cash Flow")
     st.write("**Question:** What is the primary function of establishing an emergency fund (reserve)?")
+    
+    correct_l1 = "To provide a liquid cash cushion covering 3–6 months of essential living expenses during unforeseen crises."
     
     ans = st.radio(
         "Select the correct answer:",
         [
             "To maximize high-risk speculative trading opportunities.",
-            "To provide a liquid cash cushion covering 3–6 months of essential living expenses during unforeseen crises.",
+            correct_l1,
             "To purchase luxury lifestyle items without waiting."
         ],
-        index=None
+        index=None,
+        key="radio_l1"
     )
     
-    if st.button("Submit Answer", use_container_width=True):
-        if ans == "To provide a liquid cash cushion covering 3–6 months of essential living expenses during unforeseen crises.":
-            st.success("Correct! Emergency reserves ensure defensive liquidity without relying on high-interest debt.")
-            st.session_state.xp += 20
+    if "l1_status" not in st.session_state:
+        st.session_state.l1_status = None
+        
+    if st.session_state.l1_status is None:
+        if st.button("Submit Answer", use_container_width=True):
+            if ans is None:
+                st.warning("Please choose an answer before submitting.")
+            elif ans == correct_l1:
+                st.session_state.l1_status = "correct"
+                st.session_state.xp += 20
+                st.toast("🎉 +20 XP Earned!", icon="✨")
+                st.rerun()
+            else:
+                st.session_state.l1_status = "incorrect"
+                st.rerun()
+                
+    elif st.session_state.l1_status == "correct":
+        st.success("✅ **Correct!** Emergency reserves ensure defensive liquidity without relying on high-interest debt or selling investments during downturns.")
+        if st.button("Proceed to Level 2 ➔", use_container_width=True):
+            st.session_state.pop("l1_status", None)
             st.session_state.step = "level_2_cards"
             st.rerun()
-        elif ans is not None:
-            st.error("Incorrect. An emergency reserve must strictly cover 3–6 months of essential needs in liquid cash.")
-            if st.button("Continue to Level 2"):
-                st.session_state.step = "level_2_cards"
-                st.rerun()
+            
+    elif st.session_state.l1_status == "incorrect":
+        st.error("❌ **Incorrect Answer.**")
+        st.info("💡 **Learning Takeaway:** An emergency fund must never be tied to speculation or consumption. Its primary architectural role is immediate capital preservation and liquidity.")
+        if st.button("🔄 Try Again", use_container_width=True):
+            st.session_state.l1_status = None
+            st.rerun()
 
-# Οθόνη 4: Level 2 - Learning Cards (Economic Mechanics)
+# Οθόνη 4: Level 2 - Theory
 elif st.session_state.step == "level_2_cards":
     st.header("Level 2: Core Economic Mechanics")
     st.info("📈 **The Time Value of Money**")
@@ -224,36 +245,59 @@ elif st.session_state.step == "level_2_cards":
     if st.button("Proceed to Knowledge Checkpoint (+30 XP)", use_container_width=True):
         st.session_state.xp += 30
         st.session_state.step = "level_2_quiz"
+        st.session_state.pop("l2_status", None)
         st.rerun()
 
-# Οθόνη 5: Level 2 - Quiz Checkpoint
+# Οθόνη 5: Level 2 - Quiz Checkpoint (με Feedback & Try Again)
 elif st.session_state.step == "level_2_quiz":
+    st.caption("Checkpoint 2 of 3 | Core Economic Mechanics")
     st.header("Level 2 Checkpoint: Inflation & Compounding")
     st.write("**Question:** If annual inflation averages 4% while cash remains stored uninvested at 0% return, what occurs to your capital over time?")
+    
+    correct_l2 = "The purchasing power decreases, meaning the same nominal money buys fewer goods and services."
     
     ans = st.radio(
         "Select the correct answer:",
         [
-            "The purchasing power decreases, meaning the same nominal money buys fewer goods and services.",
+            correct_l2,
             "The nominal value of cash automatically increases to match inflation.",
             "Purchasing power remains completely unchanged."
         ],
-        index=None
+        index=None,
+        key="radio_l2"
     )
     
-    if st.button("Submit Answer", use_container_width=True):
-        if ans == "The purchasing power decreases, meaning the same nominal money buys fewer goods and services.":
-            st.success("Correct! Real purchasing power deteriorates if returns do not outpace inflation.")
-            st.session_state.xp += 20
+    if "l2_status" not in st.session_state:
+        st.session_state.l2_status = None
+        
+    if st.session_state.l2_status is None:
+        if st.button("Submit Answer", use_container_width=True):
+            if ans is None:
+                st.warning("Please choose an answer before submitting.")
+            elif ans == correct_l2:
+                st.session_state.l2_status = "correct"
+                st.session_state.xp += 20
+                st.toast("🎉 +20 XP Earned!", icon="✨")
+                st.rerun()
+            else:
+                st.session_state.l2_status = "incorrect"
+                st.rerun()
+                
+    elif st.session_state.l2_status == "correct":
+        st.success("✅ **Correct!** Real purchasing power actively deteriorates when investment returns lag behind the rate of inflation.")
+        if st.button("Proceed to Level 3 ➔", use_container_width=True):
+            st.session_state.pop("l2_status", None)
             st.session_state.step = "level_3_cards"
             st.rerun()
-        elif ans is not None:
-            st.error("Incorrect. Inflation actively erodes real purchasing power over time.")
-            if st.button("Continue to Level 3"):
-                st.session_state.step = "level_3_cards"
-                st.rerun()
+            
+    elif st.session_state.l2_status == "incorrect":
+        st.error("❌ **Incorrect Answer.**")
+        st.info("💡 **Learning Takeaway:** While nominal balances stay the same (e.g., €100 remains €100), price rises diminish what that money can actually acquire.")
+        if st.button("🔄 Try Again", use_container_width=True):
+            st.session_state.l2_status = None
+            st.rerun()
 
-# Οθόνη 6: Level 3 - Learning Cards (Investment Principles)
+# Οθόνη 6: Level 3 - Theory
 elif st.session_state.step == "level_3_cards":
     st.header("Level 3: Investment Principles & Portfolio Theory")
     st.info("⚖️ **Risk, Return & Diversification**")
@@ -267,34 +311,57 @@ elif st.session_state.step == "level_3_cards":
     if st.button("Proceed to Knowledge Checkpoint (+30 XP)", use_container_width=True):
         st.session_state.xp += 30
         st.session_state.step = "level_3_quiz"
+        st.session_state.pop("l3_status", None)
         st.rerun()
 
-# Οθόνη 7: Level 3 - Quiz Checkpoint
+# Οθόνη 7: Level 3 - Quiz Checkpoint (με Feedback & Try Again)
 elif st.session_state.step == "level_3_quiz":
+    st.caption("Checkpoint 3 of 3 | Portfolio Principles")
     st.header("Level 3 Checkpoint: Risk & Diversification")
     st.write("**Question:** What is the primary architectural purpose of diversifying a multi-asset portfolio?")
+    
+    correct_l3 = "To mitigate unsystematic risk by spreading exposure across multiple non-correlated assets."
     
     ans = st.radio(
         "Select the correct answer:",
         [
             "To guarantee complete elimination of all macroeconomic market volatility.",
-            "To mitigate unsystematic risk by spreading exposure across multiple non-correlated assets.",
+            correct_l3,
             "To maximize short-term day trading returns."
         ],
-        index=None
+        index=None,
+        key="radio_l3"
     )
     
-    if st.button("Submit Answer", use_container_width=True):
-        if ans == "To mitigate unsystematic risk by spreading exposure across multiple non-correlated assets.":
-            st.success("Correct! Diversification mitigates unsystematic risk, protecting against single-firm failure.")
-            st.session_state.xp += 20
+    if "l3_status" not in st.session_state:
+        st.session_state.l3_status = None
+        
+    if st.session_state.l3_status is None:
+        if st.button("Submit Answer", use_container_width=True):
+            if ans is None:
+                st.warning("Please choose an answer before submitting.")
+            elif ans == correct_l3:
+                st.session_state.l3_status = "correct"
+                st.session_state.xp += 20
+                st.toast("🎉 +20 XP Earned!", icon="✨")
+                st.rerun()
+            else:
+                st.session_state.l3_status = "incorrect"
+                st.rerun()
+                
+    elif st.session_state.l3_status == "correct":
+        st.success("✅ **Correct!** Diversification neutralizes unsystematic (company-specific) shocks without necessarily sacrificing expected portfolio yield.")
+        if st.button("Proceed to Level 4 (Behavioral Evaluation) ➔", use_container_width=True):
+            st.session_state.pop("l3_status", None)
             st.session_state.step = "level_4_intro"
             st.rerun()
-        elif ans is not None:
-            st.error("Incorrect. Diversification cannot eliminate systematic market risk, but mitigates unsystematic risk.")
-            if st.button("Continue to Level 4"):
-                st.session_state.step = "level_4_intro"
-                st.rerun()
+            
+    elif st.session_state.l3_status == "incorrect":
+        st.error("❌ **Incorrect Answer.**")
+        st.info("💡 **Learning Takeaway:** Market-wide (systematic) risk can never be fully diversified away. Diversification specifically shields against the failure of individual companies.")
+        if st.button("🔄 Try Again", use_container_width=True):
+            st.session_state.l3_status = None
+            st.rerun()
 
 # Οθόνη 8: Level 4 - Εισαγωγή στα Συμπεριφορικά Διλήμματα
 elif st.session_state.step == "level_4_intro":
@@ -311,6 +378,7 @@ elif st.session_state.step == "level_4_intro":
 
 # Οθόνη 9: Dilemma 4.1 - Loss Aversion
 elif st.session_state.step == "dilemma_1":
+    st.caption("Dilemma 1 of 4 | Behavioral Diagnosis")
     st.subheader("Module 4.1: Loss Aversion & The Disposition Trap")
     st.caption("Prospect Theory (Kahneman & Tversky, 1979): The pain of loss is twice as intense as equivalent gain pleasure.")
     st.write("**Dilemma:** You bought shares in Company Alpha at €50. The price drops to €35 (-30%) due to structural insolvency. Independent analysts recommend reallocating capital. What do you do?")
@@ -340,6 +408,7 @@ elif st.session_state.step == "dilemma_1":
 
 # Οθόνη 10: Dilemma 4.2 - Herd Behavior / FOMO
 elif st.session_state.step == "dilemma_2":
+    st.caption("Dilemma 2 of 4 | Behavioral Diagnosis")
     st.subheader("Module 4.2: Herd Mentality & FOMO")
     st.caption("Herding: Aligning decisions with crowd euphoria out of fear of missing out on speculative gains.")
     st.write("**Dilemma:** A speculative crypto asset surges 400% in two weeks. Social media influencers boast quick wealth and urge buying. You have not analyzed its fundamentals. What do you do?")
@@ -369,6 +438,7 @@ elif st.session_state.step == "dilemma_2":
 
 # Οθόνη 11: Dilemma 4.3 - Overconfidence
 elif st.session_state.step == "dilemma_3":
+    st.caption("Dilemma 3 of 4 | Behavioral Diagnosis")
     st.subheader("Module 4.3: Overconfidence & Illusion of Control")
     st.caption("Overestimating forecasting accuracy and confusing broad bull market momentum with personal skill.")
     st.write("**Dilemma:** After two consecutive winning stock trades during a market rally, you feel you possess superior market timing abilities. What is your next move?")
@@ -398,6 +468,7 @@ elif st.session_state.step == "dilemma_3":
 
 # Οθόνη 12: Dilemma 4.4 - Present Bias
 elif st.session_state.step == "dilemma_4":
+    st.caption("Dilemma 4 of 4 | Behavioral Diagnosis")
     st.subheader("Module 4.4: Present Bias & Immediate Gratification")
     st.caption("Hyperbolic Discounting: Prioritizing immediate emotional consumption over distant wealth security.")
     st.write("**Dilemma:** You receive an unexpected bonus of €1,000. You currently possess no emergency reserve. How do you allocate the funds?")
