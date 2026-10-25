@@ -69,6 +69,21 @@ init_db()
 # --- 2. ΡΥΘΜΙΣΗ ΣΕΛΙΔΑΣ STREAMLIT ---
 st.set_page_config(page_title="FinLit & Behavioral App", page_icon="💡", layout="centered")
 
+# ==========================================
+# HIDE STREAMLIT BRANDING & SOURCE CODE LINK
+# ==========================================
+hide_streamlit_style = """
+    <style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    .viewerBadge_container__1QSob {display: none;}
+    [data-testid="stToolbar"] {visibility: hidden;}
+    </style>
+"""
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+# ==========================================
+
 # --- 3. ΔΙΑΧΕΙΡΙΣΗ ΚΑΤΑΣΤΑΣΗΣ (SESSION STATE) ---
 if "step" not in st.session_state:
     st.session_state.step = "welcome"
