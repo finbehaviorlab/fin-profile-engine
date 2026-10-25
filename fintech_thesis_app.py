@@ -3,15 +3,15 @@ import random
 import sqlite3
 
 # ==========================================
-# PIN ACCESS GATEWAY
+# 1. ΒΑΣΙΚΗ ΡΥΘΜΙΣΗ ΣΕΛΙΔΑΣ (ΑΥΣΤΗΡΑ ΠΡΩΤΗ)
 # ==========================================
-# ΒΑΣΙΚΗ ΡΥΘΜΙΣΗ ΣΕΛΙΔΑΣ (ΠΡΕΠΕΙ ΝΑ ΕΙΝΑΙ ΠΡΩΤΗ)
 st.set_page_config(page_title="FinLit & Behavioral App", page_icon="💡", layout="centered")
 
-# ΑΠΟΚΡΥΨΗ ΟΛΩΝ ΤΩΝ ΜΕΝΟΥ, HEADERS ΚΑΙ GITHUB LINKS
+# ==========================================
+# 2. ΑΠΟΚΡΥΨΗ ΟΛΩΝ ΤΩΝ ΜΕΝΟΥ, HEADERS ΚΑΙ GITHUB LINKS
+# ==========================================
 hide_streamlit_style = """
     <style>
-    /* Απόκρυψη κεφαλίδας, γραμμής εργαλείων και μενού */
     header[data-testid="stHeader"] {display: none !important;}
     [data-testid="stToolbar"] {display: none !important;}
     #MainMenu {display: none !important;}
@@ -24,14 +24,19 @@ hide_streamlit_style = """
 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
+# ==========================================
+# 3. PIN ACCESS GATEWAY
+# ==========================================
 CORRECT_PIN = "9218"
 
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
 
 if not st.session_state.authenticated:
-    st.title("🔒 Restricted Access")
-    st.info("Please enter the access PIN to continue to the application.")
+    st.title("🔒 Behavioral Finance & Decision Profiling Engine")
+    st.caption("MSc Research Prototype | Access Restricted to Authorized Reviewers")
+    
+    st.info("Please enter your designated 4-digit security PIN to launch the diagnostic environment.")
     
     col1, col2 = st.columns([2, 1])
     with col1:
@@ -39,25 +44,25 @@ if not st.session_state.authenticated:
             "Access PIN", 
             type="password", 
             max_chars=4, 
-            placeholder="Enter 4-digit PIN"
+            placeholder="Enter 4-digit PIN",
+            label_visibility="collapsed"
         )
     with col2:
-        st.write("")  # Vertical spacing for alignment
-        st.write("")
-        submit_btn = st.button("Enter", use_container_width=True)
+        submit_btn = st.button("Enter ➔", use_container_width=True)
         
     if submit_btn or pin_input:
         if pin_input == CORRECT_PIN:
             st.session_state.authenticated = True
             st.rerun()
         else:
-            st.error("❌ Invalid PIN. Please try again.")
+            st.error("❌ Invalid PIN. Please check your credentials.")
             
-    # Halts execution of the rest of the script until authenticated
     st.stop()
 # ==========================================
 
-# ---  ΡΥΘΜΙΣΗ ΒΑΣΗΣ ΔΕΔΟΜΕΝΩΝ (SQLITE) ---
+# ==========================================
+# 4. ΡΥΘΜΙΣΗ ΒΑΣΗΣ ΔΕΔΟΜΕΝΩΝ (SQLITE)
+# ==========================================
 def init_db():
     conn = sqlite3.connect("quiz_data.db")
     c = conn.cursor()
@@ -85,9 +90,9 @@ def save_result(name, xp, score, archetype):
 
 init_db()
 
-
-
-# ---  ΔΙΑΧΕΙΡΙΣΗ ΚΑΤΑΣΤΑΣΗΣ (SESSION STATE) ---
+# ==========================================
+# 5. ΔΙΑΧΕΙΡΙΣΗ ΚΑΤΑΣΤΑΣΗΣ (SESSION STATE)
+# ==========================================
 if "step" not in st.session_state:
     st.session_state.step = "welcome"
 if "xp" not in st.session_state:
@@ -101,7 +106,9 @@ if "current_level" not in st.session_state:
 if "user_name" not in st.session_state:
     st.session_state.user_name = "Learner"
 
-# --- 4. HEADER ΠΡΟΟΔΟΥ & XP ---
+# ==========================================
+# 6. HEADER ΠΡΟΟΔΟΥ & XP
+# ==========================================
 if st.session_state.step not in ["welcome", "results"]:
     col1, col2 = st.columns([3, 1])
     with col1:
@@ -111,19 +118,48 @@ if st.session_state.step not in ["welcome", "results"]:
         st.metric(label="Total XP", value=f"{st.session_state.xp} / 300")
     st.markdown("---")
 
-# ---  ΟΘΟΝΕΣ ΕΦΑΡΜΟΓΗΣ ---
+# ==========================================
+# 7. ΟΘΟΝΕΣ ΕΦΑΡΜΟΓΗΣ
+# ==========================================
 
 # Οθόνη 1: Welcome / Onboarding
 if st.session_state.step == "welcome":
-    st.title("🎓 FinTech Learning & Behavioral Bias Screener")
-    st.subheader("Master foundational finance and discover your financial mindset.")
-    st.write(
-        "Welcome! This interactive micro-learning prototype guides you through essential money principles "
-        "and evaluates behavioral decision patterns across 4 progressive levels."
+    st.title("🎓 FinTech Behavioral Profiler & Literacy Evaluator")
+    st.caption("Master's Thesis Research Prototype | University of Piraeus")
+    
+    st.markdown("""
+    Welcome to this interactive behavioral evaluation environment. This tool benchmarks foundational 
+    financial literacy and diagnoses cognitive biases across realistic financial scenarios.
+    """)
+    
+    st.markdown("---")
+    st.subheader("📋 Evaluation Structure & Flow")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        st.markdown("""
+        * **Level 1:** Cash Flow & Liquidity Defense
+        * **Level 2:** Economic Dynamics & Time Value of Money
+        """)
+    with col2:
+        st.markdown("""
+        * **Level 3:** Risk, Return & Portfolio Theory
+        * **Level 4:** Diagnostic Behavioral Dilemmas
+        """)
+        
+    st.caption("⏱️ **Estimated Duration:** 3–4 minutes | **Target:** 300 Mastery XP")
+    st.markdown("---")
+    
+    user_input = st.text_input(
+        "Participant Identifier (Name or ID):", 
+        value="", 
+        placeholder="e.g., Alex or Participant #01"
     )
-    user_input = st.text_input("Enter your name to begin:", value="Learner")
-    if st.button("Start Journey 🚀", use_container_width=True):
-        st.session_state.user_name = user_input
+    
+    st.caption("🔒 *Research Ethics & Privacy:* You may use a pseudonym or ID code. All responses are fully anonymized for academic evaluation purposes.")
+    
+    if st.button("Start Diagnostic Journey 🚀", use_container_width=True):
+        st.session_state.user_name = user_input.strip() if user_input.strip() != "" else "Anonymous Learner"
         st.session_state.step = "level_1_cards"
         st.rerun()
 
