@@ -184,7 +184,6 @@ elif st.session_state.step == "m1_1_theory":
         * **20% Savings:** Dedicated capital for debt clearance and long-term wealth building.
     * **Emergency Reserve (Emergency Fund):** A dedicated liquid cushion equal to 3–6 months of essential living costs. It prevents forced borrowing or high-interest debt during sudden crises.
     """)
-    st.caption("📚 *Institutional Reference:* Philippas (2022); Hellenic Capital Market Commission & Financial Literacy Institute (2026)")
     
     col_b, col_n = st.columns([1, 2])
     with col_b:
@@ -263,7 +262,6 @@ elif st.session_state.step == "m1_2_theory":
     * **Credit Cards (Short-Term Institutional Debt):** The financial institution settles the merchant balance on your behalf, establishing a temporary credit facility with a monthly consolidated statement.
     * **Annual Percentage Rate (APR Risk):** Carrying an unpaid balance beyond the interest-free grace period triggers high penalty APR charges, turning convenience into compounding debt.
     """)
-    st.caption("📚 *Institutional Reference:* Philippas (2022)")
     
     col_b, col_n = st.columns([1, 2])
     with col_b:
@@ -341,7 +339,6 @@ elif st.session_state.step == "m1_3_theory":
     * **Mobile Wallets & The 'Pain of Paying':** Contactless digital payments eliminate transactional friction. However, behavioral research shows this absence of physical cash counting significantly weakens spending restraint.
     * **Credential Confidentiality & Phishing Defense:** Banking institutions never solicit secret PINs, account passwords, or One-Time Passwords (OTPs) via unsolicited links or messaging channels.
     """)
-    st.caption("📚 *Institutional Reference:* Philippas (2022)")
     
     col_b, col_n = st.columns([1, 2])
     with col_b:
@@ -427,7 +424,6 @@ elif st.session_state.step == "m2_1_theory":
         * **Productive Debt:** Low-cost borrowing that expands future income or assets (e.g., student loans, affordable mortgages).
         * **Destructive Debt:** High-interest credit deployed on depreciating consumer lifestyle items (e.g., credit card rollovers).
     """)
-    st.caption("📚 *Institutional Reference:* Philippas (2022); Hellenic Capital Market Commission & Financial Literacy Institute (2026)")
     
     col_b, col_n = st.columns([1, 2])
     with col_b:
@@ -508,7 +504,6 @@ elif st.session_state.step == "m2_2_theory":
         * At a modest **4% annual inflation rate**, a basket of consumer goods costing **€100 today** will require **€104 in 1 year** and **€121.66 in 5 years**.
         * Stored idle cash steadily loses its capacity to purchase identical goods and services.
     """)
-    st.caption("📚 *Institutional Reference:* Philippas (2022); Hellenic Capital Market Commission & Financial Literacy Institute (2026)")
     
     col_b, col_n = st.columns([1, 2])
     with col_b:
@@ -588,7 +583,6 @@ elif st.session_state.step == "m2_3_theory":
         * **Compound Interest:** Returns accrue on the initial principal **plus previously accumulated returns** ("earning return on prior return").
     * **The Time Horizon Trajectory:** Reinvesting returns across extended horizons (10–30 years) converts linear gains into exponential growth. Initiating disciplined investing early maximizes this compounding multiplier.
     """)
-    st.caption("📚 *Institutional Reference:* Philippas (2022); Hellenic Capital Market Commission & Financial Literacy Institute (2026)")
     
     col_b, col_n = st.columns([1, 2])
     with col_b:
@@ -670,7 +664,6 @@ elif st.session_state.step == "m3_1_theory":
     * **Equity Shares (Corporate Ownership):** Represent fractional ownership in an enterprise. Shareholders participate in corporate expansion and variable dividend distributions, accompanied by market price volatility and downside risk.
     * **Fixed-Income Bonds (Debt Obligations):** Contractual debt certificates. Investors lend capital to sovereign states or corporations in exchange for periodic interest distributions (coupon payments) and full principal repayment upon maturity.
     """)
-    st.caption("📚 *Institutional Reference:* Hellenic Capital Market Commission & Financial Literacy Institute (2026); Philippas (2022)")
     
     col_b, col_n = st.columns([1, 2])
     with col_b:
@@ -748,7 +741,6 @@ elif st.session_state.step == "m3_2_theory":
     * **Conceptualizing Financial Risk:** Risk represents probabilistic dispersion and capital volatility, defining the measurable uncertainty of underperformance or permanent capital loss.
     * **The Trade-Off Axiom:** Higher expected returns mathematically demand accepting greater asset price volatility and drawdown exposure. Products claiming high guaranteed returns with zero risk violate core economic theory.
     """)
-    st.caption("📚 *Institutional Reference:* Hellenic Capital Market Commission & Financial Literacy Institute (2026)")
     
     col_b, col_n = st.columns([1, 2])
     with col_b:
@@ -826,7 +818,6 @@ elif st.session_state.step == "m3_3_theory":
     * **The Multi-Asset Principle:** Concentrating 100% of wealth into an isolated enterprise creates acute vulnerability. Distributing capital across non-correlated instruments insulates against single-firm insolvency.
     * **Unsystematic Risk Mitigation:** Allocating across diverse asset classes (equities, government debt, cash equivalents) dampens portfolio shocks. While broad macroeconomic volatility remains, company-specific ruin is eliminated.
     """)
-    st.caption("📚 *Institutional Reference:* Hellenic Capital Market Commission & Financial Literacy Institute (2026); Philippas (2022)")
     
     col_b, col_n = st.columns([1, 2])
     with col_b:
@@ -916,7 +907,6 @@ elif st.session_state.step == "level_4_intro":
 elif st.session_state.step == "dilemma_1":
     st.caption("Dilemma 1 of 4 | Behavioral Diagnosis")
     st.subheader("Module 4.1: Loss Aversion & The Disposition Trap")
-    st.caption("Prospect Theory (Kahneman & Tversky, 1979): The psychological pain of loss is approximately twice as intense as equivalent gain pleasure.")
     st.write("**Dilemma:** You bought shares in Company Alpha at €50. The price drops sharply to €35 (-30%) due to structural insolvency. Independent analysts recommend moving capital into a diversified index fund. What do you do?")
     
     options = [
@@ -948,7 +938,6 @@ elif st.session_state.step == "dilemma_1":
 elif st.session_state.step == "dilemma_2":
     st.caption("Dilemma 2 of 4 | Behavioral Diagnosis")
     st.subheader("Module 4.2: Herd Mentality & FOMO")
-    st.caption("Herding: Aligning decisions with crowd euphoria out of fear of missing out on speculative gains.")
     st.write("**Dilemma:** A speculative crypto asset surges 400% in two weeks. Social media influencers boast quick wealth and urge buying. You have not analyzed its fundamentals. What do you do?")
     
     options = [
@@ -980,7 +969,6 @@ elif st.session_state.step == "dilemma_2":
 elif st.session_state.step == "dilemma_3":
     st.caption("Dilemma 3 of 4 | Behavioral Diagnosis")
     st.subheader("Module 4.3: Overconfidence & Illusion of Control")
-    st.caption("Overestimating forecasting accuracy and confusing broad market momentum with personal genius.")
     st.write("**Dilemma:** After two consecutive winning stock trades during a market rally, you feel you possess superior market timing abilities. What is your next move?")
     
     options = [
@@ -1012,7 +1000,6 @@ elif st.session_state.step == "dilemma_3":
 elif st.session_state.step == "dilemma_4":
     st.caption("Dilemma 4 of 4 | Behavioral Diagnosis")
     st.subheader("Module 4.4: Present Bias & Immediate Gratification")
-    st.caption("Hyperbolic Discounting: Prioritizing immediate emotional consumption over distant wealth security.")
     st.write("**Dilemma:** You receive an unexpected bonus of €1,000. You currently possess no emergency reserve. How do you allocate the funds?")
     
     options = [
