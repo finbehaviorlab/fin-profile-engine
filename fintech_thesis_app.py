@@ -105,6 +105,10 @@ if "bias_flags" not in st.session_state:
 if "user_name" not in st.session_state:
     st.session_state.user_name = "Learner"
 
+# --- ΚΛΕΙΔΩΜΑ XP ΓΙΑ ΑΠΟΤΡΟΠΗ XP-FARMING ΜΕ ΤΟ BACK ---
+if "completed_steps" not in st.session_state:
+    st.session_state.completed_steps = set()
+
 # ==========================================
 # 6. HEADER ΠΡΟΟΔΟΥ & XP
 # ==========================================
