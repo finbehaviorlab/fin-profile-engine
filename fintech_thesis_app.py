@@ -8,7 +8,7 @@ import sqlite3
 st.set_page_config(page_title="FinLit & Behavioral App", page_icon="💡", layout="centered")
 
 # ==========================================
-# 2. ΑΠΟΚΡΥΨΗ ΟΛΩΝ ΤΩΝ ΜΕΝΟΥ, HEADERS ΚΑΙ GITHUB LINKS
+# 2. ΑΠΟΚΡΥΨΗ ΟΛΩΝ ΤΩΝ ΜΕΝΟΥ, HEADERS, GITHUB LINKS & ANCHOR ICONS
 # ==========================================
 hide_streamlit_style = """
     <style>
@@ -20,6 +20,9 @@ hide_streamlit_style = """
     div[class^="viewerBadge_"] {display: none !important;}
     button[title="View app in GitHub"] {display: none !important;}
     a[href*="github.com"] {display: none !important;}
+    /* Απόκρυψη του link icon δίπλα στους τίτλους */
+    [data-testid="stHeaderActionElements"] {display: none !important;}
+    a.anchorjs-link {display: none !important;}
     </style>
 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
@@ -138,13 +141,13 @@ if st.session_state.step == "welcome":
     col1, col2 = st.columns(2)
     with col1:
         st.markdown("""
-        * **Level 1:** Cash Flow & Liquidity Defense
-        * **Level 2:** Economic Dynamics & Time Value of Money
+        * **Level 1:** Financial Foundations (Personal Money Management)
+        * **Level 2:** Core Economic Mechanics
         """)
     with col2:
         st.markdown("""
-        * **Level 3:** Risk, Return & Portfolio Theory
-        * **Level 4:** Diagnostic Behavioral Dilemmas
+        * **Level 3:** Investment Principles & Portfolio Theory
+        * **Level 4:** Diagnostic Behavioral Bias Quizzes
         """)
         
     st.caption("⏱️ **Estimated Duration:** 3–4 minutes | **Target:** 300 Mastery XP")
