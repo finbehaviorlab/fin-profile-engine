@@ -5,6 +5,25 @@ import sqlite3
 # ==========================================
 # PIN ACCESS GATEWAY
 # ==========================================
+# ΒΑΣΙΚΗ ΡΥΘΜΙΣΗ ΣΕΛΙΔΑΣ (ΠΡΕΠΕΙ ΝΑ ΕΙΝΑΙ ΠΡΩΤΗ)
+st.set_page_config(page_title="FinLit & Behavioral App", page_icon="💡", layout="centered")
+
+# ΑΠΟΚΡΥΨΗ ΟΛΩΝ ΤΩΝ ΜΕΝΟΥ, HEADERS ΚΑΙ GITHUB LINKS
+hide_streamlit_style = """
+    <style>
+    /* Απόκρυψη κεφαλίδας, γραμμής εργαλείων και μενού */
+    header[data-testid="stHeader"] {display: none !important;}
+    [data-testid="stToolbar"] {display: none !important;}
+    #MainMenu {display: none !important;}
+    footer {display: none !important;}
+    .viewerBadge_container__1QSob {display: none !important;}
+    div[class^="viewerBadge_"] {display: none !important;}
+    button[title="View app in GitHub"] {display: none !important;}
+    a[href*="github.com"] {display: none !important;}
+    </style>
+"""
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+
 CORRECT_PIN = "9218"
 
 if "authenticated" not in st.session_state:
@@ -38,7 +57,7 @@ if not st.session_state.authenticated:
     st.stop()
 # ==========================================
 
-# --- 1. ΡΥΘΜΙΣΗ ΒΑΣΗΣ ΔΕΔΟΜΕΝΩΝ (SQLITE) ---
+# ---  ΡΥΘΜΙΣΗ ΒΑΣΗΣ ΔΕΔΟΜΕΝΩΝ (SQLITE) ---
 def init_db():
     conn = sqlite3.connect("quiz_data.db")
     c = conn.cursor()
@@ -66,25 +85,9 @@ def save_result(name, xp, score, archetype):
 
 init_db()
 
-# --- 2. ΡΥΘΜΙΣΗ ΣΕΛΙΔΑΣ STREAMLIT ---
-st.set_page_config(page_title="FinLit & Behavioral App", page_icon="💡", layout="centered")
 
-# ==========================================
-# HIDE STREAMLIT BRANDING & SOURCE CODE LINK
-# ==========================================
-hide_streamlit_style = """
-    <style>
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
-    .viewerBadge_container__1QSob {display: none;}
-    [data-testid="stToolbar"] {visibility: hidden;}
-    </style>
-"""
-st.markdown(hide_streamlit_style, unsafe_allow_html=True)
-# ==========================================
 
-# --- 3. ΔΙΑΧΕΙΡΙΣΗ ΚΑΤΑΣΤΑΣΗΣ (SESSION STATE) ---
+# ---  ΔΙΑΧΕΙΡΙΣΗ ΚΑΤΑΣΤΑΣΗΣ (SESSION STATE) ---
 if "step" not in st.session_state:
     st.session_state.step = "welcome"
 if "xp" not in st.session_state:
@@ -108,7 +111,7 @@ if st.session_state.step not in ["welcome", "results"]:
         st.metric(label="Total XP", value=f"{st.session_state.xp} / 300")
     st.markdown("---")
 
-# --- 5. ΟΘΟΝΕΣ ΕΦΑΡΜΟΓΗΣ ---
+# ---  ΟΘΟΝΕΣ ΕΦΑΡΜΟΓΗΣ ---
 
 # Οθόνη 1: Welcome / Onboarding
 if st.session_state.step == "welcome":
