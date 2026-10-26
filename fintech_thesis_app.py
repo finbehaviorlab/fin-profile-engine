@@ -129,7 +129,9 @@ if st.session_state.is_admin:
         st.info("No participant records found in the database yet.")
         
     if st.button("Exit Admin Mode 🚪", use_container_width=True):
-        st.session_state.clear()
+        st.session_state.authenticated = False
+        st.session_state.is_admin = False
+        st.session_state.step = "welcome"
         st.rerun()
         
     st.stop()
