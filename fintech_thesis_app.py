@@ -1,6 +1,7 @@
 import streamlit as st
 import random
 import sqlite3
+import pandas as pd
 
 # ==========================================
 # 1. ΒΑΣΙΚΗ ΡΥΘΜΙΣΗ ΣΕΛΙΔΑΣ
@@ -27,42 +28,7 @@ hide_streamlit_style = """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 # ==========================================
-# 3. PIN ACCESS GATEWAY
-# ==========================================
-CORRECT_PIN = "9218"
-
-if "authenticated" not in st.session_state:
-    st.session_state.authenticated = False
-
-if not st.session_state.authenticated:
-    st.title("🔒 Behavioral Finance & Decision Profiling Engine")
-    st.caption("MSc Research Prototype | Access Restricted to Authorized Reviewers")
-    
-    st.info("Please enter your designated 4-digit security PIN to launch the diagnostic environment.")
-    
-    col1, col2 = st.columns([2, 1])
-    with col1:
-        pin_input = st.text_input(
-            "Access PIN", 
-            type="password", 
-            max_chars=4, 
-            placeholder="Enter 4-digit PIN",
-            label_visibility="collapsed"
-        )
-    with col2:
-        submit_btn = st.button("Enter ➔", use_container_width=True)
-        
-    if submit_btn or pin_input:
-        if pin_input == CORRECT_PIN:
-            st.session_state.authenticated = True
-            st.rerun()
-        else:
-            st.error("❌ Invalid PIN. Please check your credentials.")
-            
-    st.stop()
-
-# ==========================================
-# 4. ΡΥΘΜΙΣΗ ΒΑΣΗΣ ΔΕΔΟΜΕΝΩΝ (SQLITE)
+# 3. ΡΥΘΜΙΣΗ ΒΑΣΗΣ ΔΕΔΟΜΕΝΩΝ (SQLITE)
 # ==========================================
 def init_db():
     conn = sqlite3.connect("quiz_data.db")
@@ -89,7 +55,84 @@ def save_result(name, xp, score, archetype):
     conn.commit()
     conn.close()
 
+def get_all_results():
+    conn = sqlite3.connect("quiz_data.db")
+    df = pd.read_sql_query("SELECT id, user_name, total_xp, vulnerability_score, dominant_archetype FROM user_results", conn)
+    conn.close()
+    return df
+
 init_db()
+
+# ==========================================
+# 4. PIN ACCESS GATEWAY & ADMIN PANEL
+# ==========================================
+USER_PIN = "9218"
+ADMIN_PIN = "9950"
+
+if "authenticated" not in st.session_state:
+    st.session_state.authenticated = False
+if "is_admin" not in st.session_state:
+    st.session_state.is_admin = False
+
+if not st.session_state.authenticated:
+    st.title("🔒 Behavioral Finance & Decision Profiling Engine")
+    st.caption("MSc Research Prototype | Access Restricted to Authorized Reviewers")
+    
+    st.info("Please enter your designated 4-digit security PIN to launch the diagnostic environment.")
+    
+    col1, col2 = st.columns([2, 1])
+    with col1:
+        pin_input = st.text_input(
+            "Access PIN", 
+            type="password", 
+            max_chars=4, 
+            placeholder="Enter 4-digit PIN",
+            label_visibility="collapsed"
+        )
+    with col2:
+        submit_btn = st.button("Enter ➔", use_container_width=True)
+        
+    if submit_btn or pin_input:
+        if pin_input == USER_PIN:
+            st.session_state.authenticated = True
+            st.session_state.is_admin = False
+            st.rerun()
+        elif pin_input == ADMIN_PIN:
+            st.session_state.authenticated = True
+            st.session_state.is_admin = True
+            st.rerun()
+        else:
+            st.error("❌ Invalid PIN. Please check your credentials.")
+            
+    st.stop()
+
+# --- Admin Dashboard View ---
+if st.session_state.is_admin:
+    st.title("📊 Researcher Admin Dashboard")
+    st.caption("Database Overview | University of Piraeus M.Sc. Research")
+    
+    df_results = get_all_results()
+    st.metric(label="Total Recorded Submissions", value=len(df_results))
+    
+    if not df_results.empty:
+        st.dataframe(df_results, use_container_width=True)
+        
+        csv_data = df_results.to_csv(index=False).encode('utf-8')
+        st.download_button(
+            label="📥 Download Results as CSV (Excel)",
+            data=csv_data,
+            file_name="participant_results.csv",
+            mime="text/csv",
+            use_container_width=True
+        )
+    else:
+        st.info("No participant records found in the database yet.")
+        
+    if st.button("Exit Admin Mode 🚪", use_container_width=True):
+        st.session_state.clear()
+        st.rerun()
+        
+    st.stop()
 
 # ==========================================
 # 5. ΔΙΑΧΕΙΡΙΣΗ ΚΑΤΑΣΤΑΣΗΣ (SESSION STATE)
@@ -105,7 +148,6 @@ if "bias_flags" not in st.session_state:
 if "user_name" not in st.session_state:
     st.session_state.user_name = "Learner"
 
-# Αποτροπή διπλής πίστωσης XP με το κουμπί Back
 if "completed_steps" not in st.session_state:
     st.session_state.completed_steps = set()
 
