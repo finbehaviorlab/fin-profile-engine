@@ -204,9 +204,9 @@ elif st.session_state.step == "m1_1_quiz":
     st.header("Knowledge Checkpoint 1.1")
     st.write("**Question:** What is the primary function of establishing an emergency fund (reserve)?")
     
-    correct = "To provide a liquid cash cushion covering 3–6 months of essential living expenses during unforeseen crises."
+    correct = "To provide a cash cushion covering 3–6 months of basic living costs during unexpected emergencies."
     ans = st.radio("Select the correct answer:", [
-        "To risk in speculative short-term trading to double capital quickly.",
+        "To gamble on high-risk trading games to double money quickly.",
         correct,
         "To purchase luxury fashion items immediately without waiting."
     ], index=None, key="r_m1_1")
@@ -255,12 +255,12 @@ elif st.session_state.step == "m1_1_quiz":
 elif st.session_state.step == "m1_2_theory":
     st.caption("Level 1: Financial Foundations | Module 1.2")
     st.header("Module 1.2: Debit Cards vs. Credit Cards")
-    st.info("🎯 **Pedagogical Objective:** Differentiate between self-funded transactional tools and revolving debt instruments.")
+    st.info("🎯 **Pedagogical Objective:** Understand the difference between spending your own money and using borrowed bank money.")
     
     st.markdown("""
-    * **Debit Cards (Direct Account Deduction):** Linked directly to your depository checking balance. Transactions deduct available funds in real time without incurring debt obligations.
-    * **Credit Cards (Short-Term Institutional Debt):** The financial institution settles the merchant balance on your behalf, establishing a temporary credit facility with a monthly consolidated statement.
-    * **Annual Percentage Rate (APR Risk):** Carrying an unpaid balance beyond the interest-free grace period triggers high penalty APR charges, turning convenience into compounding debt.
+    * **Debit Cards (Direct Account Deduction):** Linked directly to your bank account. When you pay, **your own money is taken out immediately**, so you never owe anything to the bank.
+    * **Credit Cards (Short-Term Institutional Debt):** The bank pays the shop for you, giving you **borrowed money**. At the end of the month, you receive a bill to pay the bank back.
+    * **Annual Percentage Rate (APR Risk):** If you don't repay the full credit card bill on time, the bank charges you very high extra fees (interest). What started as an easy buy can quickly turn into dangerous debt.
     """)
     
     col_b, col_n = st.columns([1, 2])
@@ -282,11 +282,11 @@ elif st.session_state.step == "m1_2_quiz":
     st.header("Knowledge Checkpoint 1.2")
     st.write("**Question:** What is the fundamental difference when executing a transaction with a credit card compared to a debit card?")
     
-    correct = "A credit card involves borrowed capital from an institution that incurs high interest if the statement is not fully repaid."
+    correct = "A credit card uses money borrowed from the bank that charges high interest if the monthly bill is not repaid in full."
     ans = st.radio("Select the correct answer:", [
         correct,
-        "A debit card borrows money from the bank, while a credit card spends your deposited salary.",
-        "Both cards use borrowed funds, but debit cards charge higher monthly maintenance fees."
+        "A debit card borrows money from the bank, while a credit card spends your own money.",
+        "Both cards use borrowed money, but debit cards charge extra fees for each purchase."
     ], index=None, key="r_m1_2")
     
     if "m1_2_status" not in st.session_state:
@@ -333,11 +333,11 @@ elif st.session_state.step == "m1_2_quiz":
 elif st.session_state.step == "m1_3_theory":
     st.caption("Level 1: Financial Foundations | Module 1.3")
     st.header("Module 1.3: Digital Banking & Payment Security")
-    st.info("🎯 **Pedagogical Objective:** Develop cybersecurity awareness and defensive digital transaction habits.")
+    st.info("🎯 **Pedagogical Objective:** Learn how to pay safely online and protect your digital money.")
     
     st.markdown("""
-    * **Mobile Wallets & The 'Pain of Paying':** Contactless digital payments eliminate transactional friction. However, behavioral research shows this absence of physical cash counting significantly weakens spending restraint.
-    * **Credential Confidentiality & Phishing Defense:** Banking institutions never solicit secret PINs, account passwords, or One-Time Passwords (OTPs) via unsolicited links or messaging channels.
+    * **Mobile Wallets & The 'Pain of Paying':** Tapping your phone (Apple Pay, Google Pay) feels so effortless that you barely notice you are spending real money. Without physically counting cash, it becomes much easier to overspend.
+    * **Credential Confidentiality & Phishing Defense:** Banks will **never** ask for your secret PIN, passwords, or SMS verification codes (OTPs) through text messages, emails, or strange links. Keep your login details strictly private.
     """)
     
     col_b, col_n = st.columns([1, 2])
@@ -359,11 +359,11 @@ elif st.session_state.step == "m1_3_quiz":
     st.header("Knowledge Checkpoint 1.3")
     st.write("**Question:** What is a fundamental security rule when utilizing digital banking and payment cards?")
     
-    correct = "Never disclose personal credentials, PINs, or one-time passwords to third parties or unsolicited links."
+    correct = "Never share your private passwords, PINs, or one-time verification codes with anyone or through suspicious links."
     ans = st.radio("Select the correct answer:", [
-        "Share your PIN with customer service whenever an email marks an account as 'locked'.",
+        "Share your PIN with customer support whenever an email says your account is locked.",
         correct,
-        "Write your password down on the back of your payment card for convenience."
+        "Write your secret password down on the back of your bank card for convenience."
     ], index=None, key="r_m1_3")
     
     if "m1_3_status" not in st.session_state:
@@ -414,15 +414,15 @@ elif st.session_state.step == "m1_3_quiz":
 elif st.session_state.step == "m2_1_theory":
     st.caption("Level 2: Core Economic Mechanics | Module 2.1")
     st.header("Module 2.1: Interest Rates & Borrowing")
-    st.info("🎯 **Pedagogical Objective:** Understand the dual function of interest as the cost of debt and the return on deposited capital.")
+    st.info("🎯 **Pedagogical Objective:** Understand how interest works: as an extra fee when you borrow, and as a reward when you save.")
     
     st.markdown("""
     * **The Dual Nature of Interest:** 
-        * For a **borrower**, interest is the price paid to an institution for utilizing borrowed funds.
-        * For a **saver/lender**, interest is the return paid by the bank for deploying capital.
+        * For a **borrower**: Interest is the **extra fee you pay** to the bank for letting you use their money.
+        * For a **saver/lender**: Interest is the **reward the bank pays you** for keeping your savings with them.
     * **Productive vs. Destructive Debt:**
-        * **Productive Debt:** Low-cost borrowing that expands future income or assets (e.g., student loans, affordable mortgages).
-        * **Destructive Debt:** High-interest credit deployed on depreciating consumer lifestyle items (e.g., credit card rollovers).
+        * **Productive Debt:** Affordable borrowing to invest in your future, like studying or buying a home (things that build value over time).
+        * **Destructive Debt:** High-interest borrowing for things that lose value right away, like clothes or gadgets you cannot afford (e.g., unpaid credit card balances).
     """)
     
     col_b, col_n = st.columns([1, 2])
@@ -444,11 +444,11 @@ elif st.session_state.step == "m2_1_quiz":
     st.header("Knowledge Checkpoint 2.1")
     st.write("**Question:** In the context of personal finance, what does the interest rate represent to a borrower?")
     
-    correct = "The periodic compensation cost paid to a lending institution for utilizing borrowed funds."
+    correct = "The extra fee you pay to the bank for using their borrowed money."
     ans = st.radio("Select the correct answer:", [
-        "A bonus paid by the bank to the borrower as a loyalty reward.",
+        "A cash bonus paid by the bank to the borrower as a gift.",
         correct,
-        "A fixed government tax dedicated solely to road maintenance."
+        "A mandatory government tax used only for road repairs."
     ], index=None, key="r_m2_1")
     
     if "m2_1_status" not in st.session_state:
@@ -495,14 +495,14 @@ elif st.session_state.step == "m2_1_quiz":
 elif st.session_state.step == "m2_2_theory":
     st.caption("Level 2: Core Economic Mechanics | Module 2.2")
     st.header("Module 2.2: The Mechanics of Inflation")
-    st.info("🎯 **Pedagogical Objective:** Analyze purchasing power erosion and the divergence between nominal and real values.")
+    st.info("🎯 **Pedagogical Objective:** Understand how rising prices quietly reduce what your money can actually buy over time.")
     
     st.markdown("""
-    * **Consumer Price Index (CPI):** Inflation measures broad price increases across goods and services over time, benchmarked systematically via the Consumer Price Index.
-    * **Purchasing Power Erosion:** If capital yields 0% while inflation runs positive, the nominal figure remains identical (€100 remains €100), but its **real purchasing power** shrinks.
+    * **Consumer Price Index (CPI):** Inflation means prices of everyday goods (food, clothes, tickets) rise over time. Economists measure this price increase using a benchmark called the **Consumer Price Index (CPI)**.
+    * **Purchasing Power Erosion:** If you keep a €10 note sitting in a drawer at 0% return, the note itself still says "€10", but its **purchasing power** shrinks. If a pizza costs €10 today, in a couple of years the same pizza might cost €12, so your €10 won't be enough to buy it anymore.
     * **The €100 Capital Simulation:** 
-        * At a modest **4% annual inflation rate**, a basket of consumer goods costing **€100 today** will require **€104 in 1 year** and **€121.66 in 5 years**.
-        * Stored idle cash steadily loses its capacity to purchase identical goods and services.
+        * If inflation runs at **4% per year**, a basket of snacks or clothes costing **€100 today** will cost **€104 in 1 year** and about **€122 in 5 years**.
+        * Storing cash idle without investing it means it gradually buys fewer and fewer things.
     """)
     
     col_b, col_n = st.columns([1, 2])
@@ -524,11 +524,11 @@ elif st.session_state.step == "m2_2_quiz":
     st.header("Knowledge Checkpoint 2.2")
     st.write("**Question:** If annual inflation averages 4% while cash remains stored uninvested at 0% return, what occurs to your capital over time?")
     
-    correct = "The purchasing power decreases, meaning the same nominal money buys fewer products."
+    correct = "Its purchasing power drops, meaning the exact same money buys fewer products in the future."
     ans = st.radio("Select the correct answer:", [
         correct,
-        "The nominal cash automatically increases by 4% to balance purchasing power.",
-        "Purchasing power remains completely unaffected because physical banknotes do not physically shrink."
+        "The cash in your wallet automatically grows by 4% to match rising store prices.",
+        "Purchasing power stays exactly identical because the number printed on the banknote does not change."
     ], index=None, key="r_m2_2")
     
     if "m2_2_status" not in st.session_state:
@@ -575,13 +575,13 @@ elif st.session_state.step == "m2_2_quiz":
 elif st.session_state.step == "m2_3_theory":
     st.caption("Level 2: Core Economic Mechanics | Module 2.3")
     st.header("Module 2.3: Compounding – Exponential Wealth Creation")
-    st.info("🎯 **Pedagogical Objective:** Understand exponential growth generated by continuous reinvestment of accumulated returns.")
+    st.info("🎯 **Pedagogical Objective:** Understand how reinvesting your profits makes your money grow faster and faster over time (snowball effect).")
     
     st.markdown("""
     * **Simple vs. Compound Interest Mechanics:** 
-        * **Simple Interest:** Returns accrue solely on the initial baseline principal.
-        * **Compound Interest:** Returns accrue on the initial principal **plus previously accumulated returns** ("earning return on prior return").
-    * **The Time Horizon Trajectory:** Reinvesting returns across extended horizons (10–30 years) converts linear gains into exponential growth. Initiating disciplined investing early maximizes this compounding multiplier.
+        * **Simple Interest:** You only earn profit on the original money you put in.
+        * **Compound Interest:** You earn profit on your original money **plus on all previous profits you leave invested** ("making your profits earn their own profits").
+    * **The Time Horizon Trajectory:** Leaving your money invested over long periods (10–30 years) creates massive growth. Starting at age 18 instead of 35 allows this snowball to grow dramatically bigger with much less effort.
     """)
     
     col_b, col_n = st.columns([1, 2])
@@ -603,11 +603,11 @@ elif st.session_state.step == "m2_3_quiz":
     st.header("Knowledge Checkpoint 2.3")
     st.write("**Question:** Why is compound interest considered one of the most powerful mechanisms in personal wealth accumulation?")
     
-    correct = "It generates exponential growth by continuously earning returns on both the principal and previously accumulated interest."
+    correct = "It creates rapid exponential growth by earning returns on both your starting money and previously earned interest."
     ans = st.radio("Select the correct answer:", [
-        "It eliminates all forms of financial taxes by legal exemption.",
+        "It legally eliminates all types of income and government taxes forever.",
         correct,
-        "It guarantees immediate doubling of invested capital within 24 hours."
+        "It promises to instantly double any investment within 24 hours guaranteed."
     ], index=None, key="r_m2_3")
     
     if "m2_3_status" not in st.session_state:
@@ -658,11 +658,11 @@ elif st.session_state.step == "m2_3_quiz":
 elif st.session_state.step == "m3_1_theory":
     st.caption("Level 3: Investment Principles & Portfolio Theory | Module 3.1")
     st.header("Module 3.1: Equity Shares vs. Fixed-Income Bonds")
-    st.info("🎯 **Pedagogical Objective:** Distinguish corporate equity ownership from contractual creditor debt obligations.")
+    st.info("🎯 **Pedagogical Objective:** Understand the difference between owning a piece of a company (stocks) and lending money for interest (bonds).")
     
     st.markdown("""
-    * **Equity Shares (Corporate Ownership):** Represent fractional ownership in an enterprise. Shareholders participate in corporate expansion and variable dividend distributions, accompanied by market price volatility and downside risk.
-    * **Fixed-Income Bonds (Debt Obligations):** Contractual debt certificates. Investors lend capital to sovereign states or corporations in exchange for periodic interest distributions (coupon payments) and full principal repayment upon maturity.
+    * **Equity Shares (Corporate Ownership):** Buying a stock means buying a tiny slice of ownership in a business (like Apple or Sony). If the company grows and makes profits, your share can become worth much more (and you may get cash rewards called dividends). But if the company struggles, share prices can fall and you risk losing money.
+    * **Fixed-Income Bonds (Debt Obligations):** A bond is an official loan certificate. Instead of buying ownership, you lend your money to a government or a large company. In return, they officially promise to pay you regular interest and return your full money back on a set date.
     """)
     
     col_b, col_n = st.columns([1, 2])
@@ -684,11 +684,11 @@ elif st.session_state.step == "m3_1_quiz":
     st.header("Knowledge Checkpoint 3.1")
     st.write("**Question:** What core legal and economic distinction separates a stock from a government bond?")
     
-    correct = "Stocks confer fractional ownership in a firm, whereas bonds are contractual debt instruments paying fixed interest."
+    correct = "Stocks give you actual partial ownership in a company, whereas bonds are loans that pay you fixed interest."
     ans = st.radio("Select the correct answer:", [
-        "Stocks guarantee a legally fixed interest repayment, whereas bonds represent voting shares in management.",
+        "Stocks guarantee a legally fixed payout every year, while bonds give you voting power to run the company.",
         correct,
-        "There is no distinction; both terms represent identical financial assets."
+        "There is no distinction; stocks and bonds are just two different names for the exact same asset."
     ], index=None, key="r_m3_1")
     
     if "m3_1_status" not in st.session_state:
@@ -735,11 +735,11 @@ elif st.session_state.step == "m3_1_quiz":
 elif st.session_state.step == "m3_2_theory":
     st.caption("Level 3: Investment Principles & Portfolio Theory | Module 3.2")
     st.header("Module 3.2: The Risk-Return Spectrum")
-    st.info("🎯 **Pedagogical Objective:** Master the foundational axiom linking potential investment yields to volatility and downside risk.")
+    st.info("🎯 **Pedagogical Objective:** Learn why aiming for higher profits always means accepting bigger ups and downs (and risk of loss).")
     
     st.markdown("""
-    * **Conceptualizing Financial Risk:** Risk represents probabilistic dispersion and capital volatility, defining the measurable uncertainty of underperformance or permanent capital loss.
-    * **The Trade-Off Axiom:** Higher expected returns mathematically demand accepting greater asset price volatility and drawdown exposure. Products claiming high guaranteed returns with zero risk violate core economic theory.
+    * **Conceptualizing Financial Risk:** In investing, risk simply means uncertainty. It is the chance that an investment's value will jump up and down, and that you might end up with less money than you started with.
+    * **The Trade-Off Axiom:** Higher potential profits always go hand-in-hand with higher risk. If an investment can make you a lot of money quickly, it can also lose a lot just as fast. Anyone promising 'huge guaranteed profits with zero risk' is pitching an unrealistic claim.
     """)
     
     col_b, col_n = st.columns([1, 2])
@@ -761,11 +761,11 @@ elif st.session_state.step == "m3_2_quiz":
     st.header("Knowledge Checkpoint 3.2")
     st.write("**Question:** According to the foundational Risk-Return trade-off principle in financial economics:")
     
-    correct = "Achieving higher long-term expected returns requires an investor to tolerate greater volatility and probability of capital loss."
+    correct = "Aiming for higher potential returns means you must accept bigger price swings and a greater chance of losing money."
     ans = st.radio("Select the correct answer:", [
-        "High returns can be guaranteed indefinitely without any risk of capital decline.",
+        "Huge profits can easily be guaranteed forever without any danger of losing your starting money.",
         correct,
-        "Low-risk assets systematically generate higher compound yields than volatile equities over decades."
+        "Super safe investments always grow faster and earn more money than stocks over long periods."
     ], index=None, key="r_m3_2")
     
     if "m3_2_status" not in st.session_state:
@@ -812,11 +812,11 @@ elif st.session_state.step == "m3_2_quiz":
 elif st.session_state.step == "m3_3_theory":
     st.caption("Level 3: Investment Principles & Portfolio Theory | Module 3.3")
     st.header("Module 3.3: Portfolio Diversification & Asset Allocation")
-    st.info("🎯 **Pedagogical Objective:** Understand unsystematic risk mitigation through balanced multi-asset allocation.")
+    st.info("🎯 **Pedagogical Objective:** Learn why spreading your money across different investments protects you from losing everything (don't put all your eggs in one basket).")
     
     st.markdown("""
-    * **The Multi-Asset Principle:** Concentrating 100% of wealth into an isolated enterprise creates acute vulnerability. Distributing capital across non-correlated instruments insulates against single-firm insolvency.
-    * **Unsystematic Risk Mitigation:** Allocating across diverse asset classes (equities, government debt, cash equivalents) dampens portfolio shocks. While broad macroeconomic volatility remains, company-specific ruin is eliminated.
+    * **The Multi-Asset Principle:** Putting 100% of your money into a single company is very dangerous. If that company goes bankrupt, you lose all your savings. Spreading your cash across different investments protects your money if one goes wrong.
+    * **Unsystematic Risk Mitigation:** By mixing different types of investments (like company stocks, government bonds, and cash), bad news in one area won't destroy your whole balance. While markets will always have ups and downs, you completely avoid total ruin from a single company failure.
     """)
     
     col_b, col_n = st.columns([1, 2])
@@ -838,11 +838,11 @@ elif st.session_state.step == "m3_3_quiz":
     st.header("Knowledge Checkpoint 3.3")
     st.write("**Question:** What is the primary architectural purpose of diversifying a multi-asset portfolio?")
     
-    correct = "To mitigate unsystematic risk by spreading exposure across multiple non-correlated assets, preventing catastrophic single-asset failure."
+    correct = "To spread your money across different investments so that a failure in one asset will not wipe out your whole portfolio."
     ans = st.radio("Select the correct answer:", [
-        "To guarantee that broad global market declines will never temporarily decrease asset values.",
+        "To guarantee that market prices will never drop even temporarily during global crises.",
         correct,
-        "To achieve maximum leverage for high-frequency day trading."
+        "To borrow the maximum possible money for risky day-trading."
     ], index=None, key="r_m3_3")
     
     if "m3_3_status" not in st.session_state:
@@ -910,9 +910,9 @@ elif st.session_state.step == "dilemma_1":
     st.write("**Dilemma:** You bought shares in Company Alpha at €50. The price drops sharply to €35 (-30%) due to structural insolvency. Independent analysts recommend moving capital into a diversified index fund. What do you do?")
     
     options = [
-        ("Sell immediately at €35, accept the loss, and reallocate capital into a diversified fund.", 0, None),
-        ("Hold shares temporarily with a strict stop-loss limit to monitor movements.", 1, None),
-        ("Refuse to sell until the price recovers to €50 to avoid realizing a loss on paper.", 2, "Preserver")
+        ("Sell at €35, accept the loss, and move your money into a safer diversified fund.", 0, None),
+        ("Hold onto the shares for a little bit longer with a strict limit to see if things improve.", 1, None),
+        ("Refuse to sell until the price climbs back to €50, just so you don't officially admit a loss.", 2, "Preserver")
     ]
     
     if "d1_opts" not in st.session_state:
@@ -941,9 +941,9 @@ elif st.session_state.step == "dilemma_2":
     st.write("**Dilemma:** A speculative crypto asset surges 400% in two weeks. Social media influencers boast quick wealth and urge buying. You have not analyzed its fundamentals. What do you do?")
     
     options = [
-        ("Recognize speculative euphoria, ignore the hype, and stick to your long-term plan.", 0, None),
-        ("Invest a minor, discretionary sum of pocket money that you are fully prepared to lose.", 1, None),
-        ("Allocate significant personal savings immediately to avoid missing out on the rally.", 2, "Follower")
+        ("Recognize the hype bubble, ignore the buzz, and stick to your long-term plan.", 0, None),
+        ("Put in only a tiny amount of pocket money that you wouldn't mind losing completely.", 1, None),
+        ("Jump in and invest a big chunk of your savings right away so you don't miss out on the gains.", 2, "Follower")
     ]
     
     if "d2_opts" not in st.session_state:
@@ -972,9 +972,9 @@ elif st.session_state.step == "dilemma_3":
     st.write("**Dilemma:** After two consecutive winning stock trades during a market rally, you feel you possess superior market timing abilities. What is your next move?")
     
     options = [
-        ("Acknowledge that broad market trends drove returns, keeping core capital safely diversified.", 0, None),
-        ("Commit to deeper fundamental research before deploying additional capital.", 1, None),
-        ("Shift bulk savings into aggressive short-term day trading based on gut instinct.", 2, "Accumulator")
+        ("Realize that general market luck played a big role, keeping your core money safely diversified.", 0, None),
+        ("Pause and do careful research on companies before risking any extra money.", 1, None),
+        ("Move most of your savings into risky fast-trading because you feel your gut instincts can't fail.", 2, "Accumulator")
     ]
     
     if "d3_opts" not in st.session_state:
@@ -1003,9 +1003,9 @@ elif st.session_state.step == "dilemma_4":
     st.write("**Dilemma:** You receive an unexpected bonus of €1,000. You currently possess no emergency reserve. How do you allocate the funds?")
     
     options = [
-        ("Place the majority (€700–€800) into an emergency liquid reserve or conservative savings vehicle.", 0, None),
-        ("Split the sum equally between savings reserves and personal leisure purchases.", 1, None),
-        ("Spend the entire €1,000 immediately on luxury retail items, postponing savings to later.", 2, "Self-Control Deficiency")
+        ("Put most of it (€700–€800) into an emergency fund to build an essential safety net.", 0, None),
+        ("Split the money 50/50: half straight to savings and half for fun and shopping.", 1, None),
+        ("Spend all €1,000 right now on shopping and fun items, leaving saving for sometime later in life.", 2, "Self-Control Deficiency")
     ]
     
     if "d4_opts" not in st.session_state:
