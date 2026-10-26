@@ -893,20 +893,38 @@ elif st.session_state.step == "level_4_intro":
     st.header("Level 4: Diagnostic Behavioral Bias Screening")
     st.warning("🧠 **Transition to Behavioral Dilemmas**")
     st.write(
-        "Congratulations on completing the financial literacy curriculum! Level 4 presents realistic financial dilemmas. "
-        "There are no simple 'right or wrong' answers here. Choose what reflects your authentic personal reaction."
+        "Congratulations on completing the financial literacy curriculum! Level 4 explores how human emotions and psychological traps influence our money decisions. "
+        "Before each dilemma, you will see a brief Awareness Card explaining the bias. Then, you will face a real-world scenario. "
+        "There are no simple 'right or wrong' answers here — select what truly reflects your personal reaction."
     )
-    if st.button("Begin Behavioral Dilemmas (+10 XP)", use_container_width=True):
+    if st.button("Begin Behavioral Exploration (+15 XP)", use_container_width=True):
         if "l4_intro" not in st.session_state.completed_steps:
-            st.session_state.xp += 10
+            st.session_state.xp += 15
             st.session_state.completed_steps.add("l4_intro")
+        st.session_state.step = "dilemma_1_theory"
+        st.rerun()
+
+# --- Module 4.1: Loss Aversion & The Disposition Trap ---
+elif st.session_state.step == "dilemma_1_theory":
+    st.caption("Level 4: Behavioral Diagnosis | Module 4.1 Awareness")
+    st.subheader("Module 4.1: Loss Aversion & The Disposition Trap")
+    st.info("🎯 **Behavioral Insight:** Recognize why the pain of admitting a financial loss often leads to much bigger damage.")
+    
+    st.markdown("""
+    * **Loss Aversion:** Psychological research shows that **losing €50 hurts twice as much as the joy of winning €50**. We hate losing so much that we often make irrational choices just to avoid admitting it.
+    * **The Disposition Trap:** When an investment falls sharply because the company is failing, investors often stubbornly refuse to sell. They tell themselves *"I haven't lost until I sell,"* hoping it climbs back to their buy price. This emotional freeze often causes catastrophic losses.
+    """)
+    
+    if st.button("Face Dilemma 4.1 (+5 XP) ➔", use_container_width=True):
+        if "d1_theory" not in st.session_state.completed_steps:
+            st.session_state.xp += 5
+            st.session_state.completed_steps.add("d1_theory")
         st.session_state.step = "dilemma_1"
         st.rerun()
 
-# --- Dilemma 4.1: Loss Aversion ---
 elif st.session_state.step == "dilemma_1":
     st.caption("Dilemma 1 of 4 | Behavioral Diagnosis")
-    st.subheader("Module 4.1: Loss Aversion & The Disposition Trap")
+    st.subheader("Scenario: The Sinking Stock")
     st.write("**Dilemma:** You bought shares in Company Alpha at €50. The price drops sharply to €35 (-30%) due to structural insolvency. Independent analysts recommend moving capital into a diversified index fund. What do you do?")
     
     options = [
@@ -921,23 +939,40 @@ elif st.session_state.step == "dilemma_1":
         
     choice = st.radio("Choose your reaction:", [opt[0] for opt in st.session_state.d1_opts], index=None)
     
-    if st.button("Confirm Choice (+15 XP)", use_container_width=True):
+    if st.button("Confirm Choice (+10 XP)", use_container_width=True):
         if choice is not None:
             selected = next(opt for opt in st.session_state.d1_opts if opt[0] == choice)
             st.session_state.bias_score += selected[1]
             if selected[2]:
                 st.session_state.bias_flags.append(selected[2])
             if "dilemma_1" not in st.session_state.completed_steps:
-                st.session_state.xp += 15
+                st.session_state.xp += 10
                 st.session_state.completed_steps.add("dilemma_1")
             del st.session_state.d1_opts
-            st.session_state.step = "dilemma_2"
+            st.session_state.step = "dilemma_2_theory"
             st.rerun()
 
-# --- Dilemma 4.2: Herd Mentality / FOMO ---
+# --- Module 4.2: Herd Mentality / FOMO ---
+elif st.session_state.step == "dilemma_2_theory":
+    st.caption("Level 4: Behavioral Diagnosis | Module 4.2 Awareness")
+    st.subheader("Module 4.2: Herd Mentality & FOMO")
+    st.info("🎯 **Behavioral Insight:** Understand the dangerous urge to follow crowds and social media hype without independent analysis.")
+    
+    st.markdown("""
+    * **Herd Mentality:** Humans naturally feel safer copying the crowd. When everyone around you or on social media is buying an asset, your brain tricks you into thinking it must be a guaranteed win.
+    * **FOMO (Fear Of Missing Out):** Watching others boast about quick profits triggers panic that you are being left behind. This emotional pressure leads people to buy at peak prices right before a crash.
+    """)
+    
+    if st.button("Face Dilemma 4.2 (+5 XP) ➔", use_container_width=True):
+        if "d2_theory" not in st.session_state.completed_steps:
+            st.session_state.xp += 5
+            st.session_state.completed_steps.add("d2_theory")
+        st.session_state.step = "dilemma_2"
+        st.rerun()
+
 elif st.session_state.step == "dilemma_2":
     st.caption("Dilemma 2 of 4 | Behavioral Diagnosis")
-    st.subheader("Module 4.2: Herd Mentality & FOMO")
+    st.subheader("Scenario: The Viral Trend")
     st.write("**Dilemma:** A speculative crypto asset surges 400% in two weeks. Social media influencers boast quick wealth and urge buying. You have not analyzed its fundamentals. What do you do?")
     
     options = [
@@ -952,23 +987,40 @@ elif st.session_state.step == "dilemma_2":
         
     choice = st.radio("Choose your reaction:", [opt[0] for opt in st.session_state.d2_opts], index=None)
     
-    if st.button("Confirm Choice (+15 XP)", use_container_width=True):
+    if st.button("Confirm Choice (+10 XP)", use_container_width=True):
         if choice is not None:
             selected = next(opt for opt in st.session_state.d2_opts if opt[0] == choice)
             st.session_state.bias_score += selected[1]
             if selected[2]:
                 st.session_state.bias_flags.append(selected[2])
             if "dilemma_2" not in st.session_state.completed_steps:
-                st.session_state.xp += 15
+                st.session_state.xp += 10
                 st.session_state.completed_steps.add("dilemma_2")
             del st.session_state.d2_opts
-            st.session_state.step = "dilemma_3"
+            st.session_state.step = "dilemma_3_theory"
             st.rerun()
 
-# --- Dilemma 4.3: Overconfidence ---
+# --- Module 4.3: Overconfidence & Illusion of Control ---
+elif st.session_state.step == "dilemma_3_theory":
+    st.caption("Level 4: Behavioral Diagnosis | Module 4.3 Awareness")
+    st.subheader("Module 4.3: Overconfidence & Illusion of Control")
+    st.info("🎯 **Behavioral Insight:** Beware of confusing luck with skill after short-term financial wins.")
+    
+    st.markdown("""
+    * **Overconfidence Bias:** When people experience quick early success in markets, they tend to overestimate their own predictive abilities and underestimate true market risk.
+    * **Illusion of Control:** Believing that your personal intuition or "gut feeling" can outsmart the market. This often leads to excessive trading, skipping homework, and taking dangerous financial bets.
+    """)
+    
+    if st.button("Face Dilemma 4.3 (+5 XP) ➔", use_container_width=True):
+        if "d3_theory" not in st.session_state.completed_steps:
+            st.session_state.xp += 5
+            st.session_state.completed_steps.add("d3_theory")
+        st.session_state.step = "dilemma_3"
+        st.rerun()
+
 elif st.session_state.step == "dilemma_3":
     st.caption("Dilemma 3 of 4 | Behavioral Diagnosis")
-    st.subheader("Module 4.3: Overconfidence & Illusion of Control")
+    st.subheader("Scenario: The Winning Streak")
     st.write("**Dilemma:** After two consecutive winning stock trades during a market rally, you feel you possess superior market timing abilities. What is your next move?")
     
     options = [
@@ -983,23 +1035,40 @@ elif st.session_state.step == "dilemma_3":
         
     choice = st.radio("Choose your reaction:", [opt[0] for opt in st.session_state.d3_opts], index=None)
     
-    if st.button("Confirm Choice (+15 XP)", use_container_width=True):
+    if st.button("Confirm Choice (+10 XP)", use_container_width=True):
         if choice is not None:
             selected = next(opt for opt in st.session_state.d3_opts if opt[0] == choice)
             st.session_state.bias_score += selected[1]
             if selected[2]:
                 st.session_state.bias_flags.append(selected[2])
             if "dilemma_3" not in st.session_state.completed_steps:
-                st.session_state.xp += 15
+                st.session_state.xp += 10
                 st.session_state.completed_steps.add("dilemma_3")
             del st.session_state.d3_opts
-            st.session_state.step = "dilemma_4"
+            st.session_state.step = "dilemma_4_theory"
             st.rerun()
 
-# --- Dilemma 4.4: Present Bias ---
+# --- Module 4.4: Present Bias & Immediate Gratification ---
+elif st.session_state.step == "dilemma_4_theory":
+    st.caption("Level 4: Behavioral Diagnosis | Module 4.4 Awareness")
+    st.subheader("Module 4.4: Present Bias & Immediate Gratification")
+    st.info("🎯 **Behavioral Insight:** Notice how immediate desires constantly sabotage long-term financial freedom.")
+    
+    st.markdown("""
+    * **Present Bias:** The powerful psychological tendency to value immediate rewards today far more than significantly larger rewards in the future.
+    * **Immediate Gratification:** Spending money instantly on temporary pleasures (like trendy gadgets or clothes) delivers a quick dopamine hit, but repeatedly leaves you without savings or protection when real emergencies hit.
+    """)
+    
+    if st.button("Face Dilemma 4.4 (+5 XP) ➔", use_container_width=True):
+        if "d4_theory" not in st.session_state.completed_steps:
+            st.session_state.xp += 5
+            st.session_state.completed_steps.add("d4_theory")
+        st.session_state.step = "dilemma_4"
+        st.rerun()
+
 elif st.session_state.step == "dilemma_4":
     st.caption("Dilemma 4 of 4 | Behavioral Diagnosis")
-    st.subheader("Module 4.4: Present Bias & Immediate Gratification")
+    st.subheader("Scenario: The Sudden Bonus")
     st.write("**Dilemma:** You receive an unexpected bonus of €1,000. You currently possess no emergency reserve. How do you allocate the funds?")
     
     options = [
@@ -1014,14 +1083,14 @@ elif st.session_state.step == "dilemma_4":
         
     choice = st.radio("Choose your reaction:", [opt[0] for opt in st.session_state.d4_opts], index=None)
     
-    if st.button("Complete Diagnostic Evaluation (+15 XP)", use_container_width=True):
+    if st.button("Complete Diagnostic Evaluation (+10 XP)", use_container_width=True):
         if choice is not None:
             selected = next(opt for opt in st.session_state.d4_opts if opt[0] == choice)
             st.session_state.bias_score += selected[1]
             if selected[2]:
                 st.session_state.bias_flags.append(selected[2])
             if "dilemma_4" not in st.session_state.completed_steps:
-                st.session_state.xp += 15
+                st.session_state.xp += 10
                 st.session_state.completed_steps.add("dilemma_4")
             del st.session_state.d4_opts
             st.session_state.step = "results"
