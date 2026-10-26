@@ -87,12 +87,13 @@ if not st.session_state.authenticated:
             type="password", 
             max_chars=4, 
             placeholder="Enter 4-digit PIN",
-            label_visibility="collapsed"
+            label_visibility="collapsed",
+            key="pin_field"
         )
     with col2:
         submit_btn = st.button("Enter ➔", use_container_width=True)
         
-    if submit_btn or pin_input:
+    if submit_btn:
         if pin_input == USER_PIN:
             st.session_state.authenticated = True
             st.session_state.is_admin = False
@@ -129,9 +130,8 @@ if st.session_state.is_admin:
         st.info("No participant records found in the database yet.")
         
     if st.button("Exit Admin Mode 🚪", use_container_width=True):
-        st.session_state.authenticated = False
-        st.session_state.is_admin = False
-        st.session_state.step = "welcome"
+        for key in list(st.session_state.keys()):
+            del st.session_state[key]
         st.rerun()
         
     st.stop()
