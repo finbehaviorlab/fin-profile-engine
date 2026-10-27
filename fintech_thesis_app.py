@@ -2,6 +2,7 @@ import streamlit as st
 import random
 import sqlite3
 import pandas as pd
+import time
 
 # ==========================================
 # 1. ΒΑΣΙΚΗ ΡΥΘΜΙΣΗ ΣΕΛΙΔΑΣ
@@ -38,6 +39,7 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_name TEXT,
             total_xp INTEGER,
+            completion_time_minutes REAL,
             vulnerability_score INTEGER,
             dominant_archetype TEXT
         )
@@ -45,19 +47,19 @@ def init_db():
     conn.commit()
     conn.close()
 
-def save_result(name, xp, score, archetype):
+def save_result(name, xp, minutes, score, archetype):
     conn = sqlite3.connect("quiz_data.db")
     c = conn.cursor()
     c.execute("""
-        INSERT INTO user_results (user_name, total_xp, vulnerability_score, dominant_archetype)
-        VALUES (?, ?, ?, ?)
-    """, (name, xp, score, archetype))
+        INSERT INTO user_results (user_name, total_xp, completion_time_minutes, vulnerability_score, dominant_archetype)
+        VALUES (?, ?, ?, ?, ?)
+    """, (name, xp, minutes, score, archetype))
     conn.commit()
     conn.close()
 
 def get_all_results():
     conn = sqlite3.connect("quiz_data.db")
-    df = pd.read_sql_query("SELECT id, user_name, total_xp, vulnerability_score, dominant_archetype FROM user_results", conn)
+    df = pd.read_sql_query("SELECT id, user_name, total_xp, completion_time_minutes, vulnerability_score, dominant_archetype FROM user_results", conn)
     conn.close()
     return df
 
@@ -209,6 +211,7 @@ if st.session_state.step == "welcome":
     
     if st.button("Start Diagnostic Journey 🚀", use_container_width=True):
         st.session_state.user_name = user_input.strip() if user_input.strip() != "" else "Anonymous Learner"
+        st.session_state.start_time = time.time()  # <-- Καταγραφή ώρας έναρξης
         st.session_state.step = "m1_1_theory"
         st.rerun()
 
@@ -1166,12 +1169,24 @@ elif st.session_state.step == "results":
         archetype = "The Independent"
         desc = "Analytical, methodical decision-making with low susceptibility to emotional market traps."
         
-    save_result(st.session_state.user_name, st.session_state.xp, score, archetype)
+    # Υπολογισμός χρόνου σε λεπτά με 1 δεκαδικό
+    if "start_time" in st.session_state and st.session_state.start_time:
+        elapsed_time = round((time.time() - st.session_state.start_time) / 60.0, 1)
+    else:
+        elapsed_time = 0.0
+
+    save_result(st.session_state.user_name, st.session_state.xp, elapsed_time, score, archetype)
     
     st.subheader(f"Dominant Archetype: **{archetype}**")
     st.info(f"**Behavioral Profile:** {desc}")
     
-    st.metric(label="Vulnerability Score (0–8 pts)", value=f"{score} / 8")
+    # Εμφάνιση metrics (Vulnerability + Χρόνος)
+    col_m1, col_m2 = st.columns(2)
+    with col_m1:
+        st.metric(label="Vulnerability Score (0–8 pts)", value=f"{score} / 8")
+    with col_m2:
+        st.metric(label="Completion Time", value=f"{elapsed_time} min")
+    
     if score <= 2:
         st.success("🟢 **Low Bias Susceptibility:** Demonstrates strong emotional discipline and objective evaluation.")
     elif score <= 5:
