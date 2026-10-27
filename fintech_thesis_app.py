@@ -44,6 +44,12 @@ def init_db():
             dominant_archetype TEXT
         )
     """)
+    # Αυτόματος έλεγχος: αν ο πίνακας είναι παλιός, προσθέτει τη στήλη του χρόνου
+    c.execute("PRAGMA table_info(user_results)")
+    columns = [col[1] for col in c.fetchall()]
+    if "completion_time_minutes" not in columns:
+        c.execute("ALTER TABLE user_results ADD COLUMN completion_time_minutes REAL")
+        
     conn.commit()
     conn.close()
 
