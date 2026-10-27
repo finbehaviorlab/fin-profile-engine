@@ -67,7 +67,7 @@ init_db()
 # 4. PIN ACCESS GATEWAY & ADMIN PANEL
 # ==========================================
 USER_PIN = "9218"
-ADMIN_PIN = "9950"
+ADMIN_PIN = "1453"
 
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
