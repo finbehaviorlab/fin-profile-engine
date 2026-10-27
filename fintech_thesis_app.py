@@ -196,7 +196,7 @@ if st.session_state.step == "welcome":
         * **Level 4:** Diagnostic Behavioral Bias Quizzes
         """)
         
-    st.caption("⏱️ **Estimated Duration:** 4–5 minutes | **Target:** 300 Mastery XP")
+    st.caption("⏱️ **Estimated Duration:** 12–15 minutes | **Target:** 300 Mastery XP")
     st.markdown("---")
     
     user_input = st.text_input(
