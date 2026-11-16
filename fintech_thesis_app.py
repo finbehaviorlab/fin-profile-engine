@@ -157,6 +157,8 @@ if "bias_score" not in st.session_state:
     st.session_state.bias_score = 0
 if "bias_flags" not in st.session_state:
     st.session_state.bias_flags = []
+if "triggered_biases" not in st.session_state:
+    st.session_state.triggered_biases = []
 if "user_name" not in st.session_state:
     st.session_state.user_name = "Learner"
 
@@ -217,7 +219,7 @@ if st.session_state.step == "welcome":
     
     if st.button("Start Diagnostic Journey 🚀", use_container_width=True):
         st.session_state.user_name = user_input.strip() if user_input.strip() != "" else "Anonymous Learner"
-        st.session_state.start_time = time.time()  # <-- Καταγραφή ώρας έναρξης
+        st.session_state.start_time = time.time()
         st.session_state.step = "m1_1_theory"
         st.rerun()
 
@@ -998,6 +1000,8 @@ elif st.session_state.step == "dilemma_1":
         if choice is not None:
             selected = next(opt for opt in st.session_state.d1_opts if opt[0] == choice)
             st.session_state.bias_score += selected[1]
+            if selected[1] > 0 and "loss_aversion" not in st.session_state.triggered_biases:
+                st.session_state.triggered_biases.append("loss_aversion")
             if selected[2]:
                 st.session_state.bias_flags.append(selected[2])
             if "dilemma_1" not in st.session_state.completed_steps:
@@ -1046,6 +1050,8 @@ elif st.session_state.step == "dilemma_2":
         if choice is not None:
             selected = next(opt for opt in st.session_state.d2_opts if opt[0] == choice)
             st.session_state.bias_score += selected[1]
+            if selected[1] > 0 and "fomo" not in st.session_state.triggered_biases:
+                st.session_state.triggered_biases.append("fomo")
             if selected[2]:
                 st.session_state.bias_flags.append(selected[2])
             if "dilemma_2" not in st.session_state.completed_steps:
@@ -1094,6 +1100,8 @@ elif st.session_state.step == "dilemma_3":
         if choice is not None:
             selected = next(opt for opt in st.session_state.d3_opts if opt[0] == choice)
             st.session_state.bias_score += selected[1]
+            if selected[1] > 0 and "overconfidence" not in st.session_state.triggered_biases:
+                st.session_state.triggered_biases.append("overconfidence")
             if selected[2]:
                 st.session_state.bias_flags.append(selected[2])
             if "dilemma_3" not in st.session_state.completed_steps:
@@ -1142,6 +1150,8 @@ elif st.session_state.step == "dilemma_4":
         if choice is not None:
             selected = next(opt for opt in st.session_state.d4_opts if opt[0] == choice)
             st.session_state.bias_score += selected[1]
+            if selected[1] > 0 and "present_bias" not in st.session_state.triggered_biases:
+                st.session_state.triggered_biases.append("present_bias")
             if selected[2]:
                 st.session_state.bias_flags.append(selected[2])
             if "dilemma_4" not in st.session_state.completed_steps:
@@ -1152,7 +1162,7 @@ elif st.session_state.step == "dilemma_4":
             st.rerun()
 
 # ==============================================================================
-# RESULTS: Behavioral Scorecard
+# RESULTS: Behavioral Scorecard & Robo-Advisor Guidance
 # ==============================================================================
 elif st.session_state.step == "results":
     st.balloons()
@@ -1199,12 +1209,94 @@ elif st.session_state.step == "results":
         st.warning("🟡 **Moderate Bias Susceptibility:** Occasional vulnerability to cognitive shortcuts; mindful review recommended.")
     else:
         st.error("🔴 **High Bias Susceptibility:** Elevated emotional sensitivity in financial environments; strict de-biasing nudges required.")
+
+    # ==========================================================================
+    # ROBO-ADVISOR PERSONALIZED GUIDANCE & PORTFOLIO ALLOCATION
+    # ==========================================================================
+    st.markdown("---")
+    st.subheader("🤖 Robo-Advisor Behavioral Guidance & Action Plan")
+    
+    triggered = st.session_state.triggered_biases
+    
+    st.markdown("#### 1. Personalized De-Biasing Action Rules")
+    if not triggered:
+        st.success(
+            "✅ **Disciplined Decision-Making:** You avoided emotional traps across all scenarios. "
+            "Maintain a long-term passive strategy using diversified index ETFs and periodic annual rebalancing."
+        )
+    else:
+        if "loss_aversion" in triggered:
+            st.info(
+                "🛡️ **Loss Aversion Safeguard (Pre-Set Stop-Loss Rule):** Before entering any investment, define a strict "
+                "maximum downside threshold (e.g., -15%). Automating exit rules prevents emotional paralysis and stops "
+                "declining positions from turning into severe capital losses."
+            )
+        if "fomo" in triggered:
+            st.info(
+                "⏳ **FOMO & Herd Control (48-Hour Cooling-Off Rule):** Impose a mandatory 48-hour waiting period before "
+                "acting on viral social media trends. Conduct basic fundamental research first, and cap any speculative "
+                "trend exposure to a strict maximum of **5%** of your investable portfolio."
+            )
+        if "overconfidence" in triggered:
+            st.info(
+                "📊 **Overconfidence Guardrail (Core Index Diversification):** Avoid short-term market timing based on "
+                "recent wins. Anchor your core wealth in broadly diversified index ETFs or mutual funds so returns rely "
+                "on long-term economic growth rather than temporary market luck."
+            )
+        if "present_bias" in triggered:
+            st.info(
+                "💰 **Present Bias Countermeasure ('Pay Yourself First'):** Prioritize building a dedicated **3–6 month "
+                "Emergency Fund** and a goal-based savings account first. Invest only the remaining surplus after your "
+                "essential safety net and future plans are secured."
+            )
+
+    # Βασική κατανομή ανά Pompian BIT Archetype (για νέους επενδυτές 17-20 ετών)
+    allocations = {
+        "The Preserver": {"equities": 20, "bonds": 30, "cash": 50, "style": "Defensive Capital Preservation"},
+        "The Follower": {"equities": 30, "bonds": 30, "cash": 40, "style": "Conservative-Balanced (Trend-Filtered)"},
+        "The Independent": {"equities": 50, "bonds": 25, "cash": 25, "style": "Balanced Long-Term Growth"},
+        "The Accumulator": {"equities": 55, "bonds": 25, "cash": 20, "style": "Controlled Growth (Concentration-Capped)"}
+    }
+    
+    base_alloc = allocations[archetype].copy()
+    
+    # Δυναμική προσαρμογή ρίσκου βάσει Vulnerability Score (High Vulnerability >= 6)
+    risk_adjusted_note = ""
+    if score >= 6:
+        base_alloc["equities"] = max(10, base_alloc["equities"] - 10)
+        base_alloc["cash"] += 10
+        risk_adjusted_note = (
+            f"⚠️ *Dynamic Risk Adjustment Applied:* Due to your elevated Vulnerability Score ({score}/8), "
+            "the Robo-Advisor automatically shifted **10%** from Equities into Portfolio Cash to buffer emotional volatility."
+        )
+
+    st.markdown(f"#### 2. Illustrative Robo-Advisor Asset Allocation ({base_alloc['style']})")
+    
+    col_a1, col_a2, col_a3 = st.columns(3)
+    with col_a1:
+        st.metric(label="🌍 Global Equity ETFs", value=f"{base_alloc['equities']}%")
+    with col_a2:
+        st.metric(label="🏛️ Fixed-Income Bonds", value=f"{base_alloc['bonds']}%")
+    with col_a3:
+        st.metric(label="💵 Portfolio Cash (Money Market)", value=f"{base_alloc['cash']}%")
+        
+    if risk_adjusted_note:
+        st.warning(risk_adjusted_note)
+        
+    st.caption(
+        "📌 **Important Clarification & Educational Disclaimer:** This allocation applies strictly to your **investable capital "
+        "after** securing a separate 3–6 month Emergency Fund. Here, *'Portfolio Cash'* does not refer to your everyday spending "
+        "money or total personal savings; it represents short-term, low-risk liquidity reserves (such as money-market funds or "
+        "treasury bills) held inside your investment portfolio to cushion market downturns and enable disciplined rebalancing. "
+        "Provided strictly for educational simulation purposes."
+    )
+    st.markdown("---")
         
     st.markdown("### 🏅 Milestone Badges Earned:")
-    st.markdown("- 🥉 **Financial Foundations Master** (Level 1)")
-    st.markdown("- 🥈 **Economic Mechanics Expert** (Level 2)")
-    st.markdown("- 🥇 **Portfolio Strategist** (Level 3)")
-    st.markdown("- 🎖️ **Behavioral FinTech Diagnosed** (Level 4)")
+    st.markdown("- 🥉 **Money Basics Explorer** (Level 1)")
+    st.markdown("- 🥈 **Economics Apprentice** (Level 2)")
+    st.markdown("- 🥇 **Investing Novice** (Level 3)")
+    st.markdown("- 🎖️ **Behavioral Learner** (Level 4)")
     
     if st.button("Restart Experience 🔄", use_container_width=True):
         st.session_state.clear()
