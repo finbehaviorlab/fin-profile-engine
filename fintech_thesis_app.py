@@ -229,6 +229,10 @@ if st.session_state.step == "welcome":
 
 # --- Module 1.1: Saving & Personal Budgeting ---
 elif st.session_state.step == "m1_1_theory":
+    if st.button("⬅ Back"):
+        st.session_state.step = "welcome"
+        st.rerun()
+        
     st.caption("Level 1: Financial Foundations | Module 1.1")
     st.header("Module 1.1: Saving & Personal Budgeting")
     st.info("🎯 **Pedagogical Objective:** Master cash-flow allocation and proactive expenditure tracking.")
@@ -242,26 +246,20 @@ elif st.session_state.step == "m1_1_theory":
     * **Emergency Reserve (Emergency Fund):** A dedicated liquid cushion equal to 3–6 months of essential living costs. It prevents forced borrowing or high-interest debt during sudden crises.
     """)
     
-    col_b, col_n, col_s = st.columns([1, 2, 1])
-    with col_b:
-        if st.button("⬅ Back", use_container_width=True):
-            st.session_state.step = "welcome"
-            st.rerun()
-    with col_n:
-        if st.button("Complete & Checkpoint (+10 XP)", use_container_width=True):
-            if "m1_1_theory" not in st.session_state.completed_steps:
-                st.session_state.xp += 10
-                st.session_state.completed_steps.add("m1_1_theory")
-            st.session_state.step = "m1_1_quiz"
-            st.session_state.pop("m1_1_status", None)
-            st.rerun()
-    with col_s:
-        if st.button("Next (0 XP) ➔", use_container_width=True):
-            st.session_state.step = "m1_1_quiz"
-            st.session_state.pop("m1_1_status", None)
-            st.rerun()
+    if st.button("Proceed to Checkpoint 1.1 (+10 XP) ➔", use_container_width=True):
+        if "m1_1_theory" not in st.session_state.completed_steps:
+            st.session_state.xp += 10
+            st.session_state.completed_steps.add("m1_1_theory")
+        st.session_state.step = "m1_1_quiz"
+        st.session_state.pop("m1_1_status", None)
+        st.rerun()
 
 elif st.session_state.step == "m1_1_quiz":
+    if st.button("⬅ Back"):
+        st.session_state.pop("m1_1_status", None)
+        st.session_state.step = "m1_1_theory"
+        st.rerun()
+        
     st.caption("Checkpoint 1.1 | Saving & Personal Budgeting")
     st.header("Knowledge Checkpoint 1.1")
     st.write("**Question:** What is the primary function of establishing an emergency fund (reserve)?")
@@ -277,60 +275,36 @@ elif st.session_state.step == "m1_1_quiz":
         st.session_state.m1_1_status = None
         
     if st.session_state.m1_1_status is None:
-        col_b, col_s, col_nxt = st.columns([1, 2, 1])
-        with col_b:
-            if st.button("⬅ Back", use_container_width=True):
-                st.session_state.step = "m1_1_theory"
+        if st.button("Submit Answer", use_container_width=True):
+            if ans == correct:
+                st.session_state.m1_1_status = "correct"
+                if "m1_1_quiz" not in st.session_state.completed_steps:
+                    st.session_state.xp += 15
+                    st.session_state.completed_steps.add("m1_1_quiz")
+                st.toast("🎉 +15 XP Earned!", icon="✨")
                 st.rerun()
-        with col_s:
-            if st.button("Submit Answer", use_container_width=True):
-                if ans == correct:
-                    st.session_state.m1_1_status = "correct"
-                    if "m1_1_quiz" not in st.session_state.completed_steps:
-                        st.session_state.xp += 15
-                        st.session_state.completed_steps.add("m1_1_quiz")
-                    st.toast("🎉 +15 XP Earned!", icon="✨")
-                    st.rerun()
-                elif ans is not None:
-                    st.session_state.m1_1_status = "incorrect"
-                    st.rerun()
-        with col_nxt:
-            if st.button("Next (0 XP) ➔", use_container_width=True):
-                st.session_state.step = "m1_2_theory"
+            elif ans is not None:
+                st.session_state.m1_1_status = "incorrect"
                 st.rerun()
     elif st.session_state.m1_1_status == "correct":
         st.success("✅ **Correct!** Emergency reserves ensure defensive liquidity without relying on high-interest debt during crises.")
-        col_b, col_c = st.columns([1, 2])
-        with col_b:
-            if st.button("⬅ Back", use_container_width=True):
-                st.session_state.m1_1_status = None
-                st.session_state.step = "m1_1_theory"
-                st.rerun()
-        with col_c:
-            if st.button("Continue to Module 1.2 ➔", use_container_width=True):
-                st.session_state.pop("m1_1_status", None)
-                st.session_state.step = "m1_2_theory"
-                st.rerun()
+        if st.button("Continue to Module 1.2 ➔", use_container_width=True):
+            st.session_state.pop("m1_1_status", None)
+            st.session_state.step = "m1_2_theory"
+            st.rerun()
     elif st.session_state.m1_1_status == "incorrect":
         st.error("❌ **Incorrect Answer.**")
         st.info("💡 **Takeaway:** Emergency reserves are designed solely to cover basic living expenses during sudden crises, not for luxury purchases or speculation.")
-        col_b, col_r, col_nxt = st.columns([1, 2, 1])
-        with col_b:
-            if st.button("⬅ Back", use_container_width=True):
-                st.session_state.step = "m1_1_theory"
-                st.rerun()
-        with col_r:
-            if st.button("🔄 Try Again", use_container_width=True):
-                st.session_state.m1_1_status = None
-                st.rerun()
-        with col_nxt:
-            if st.button("Next (0 XP) ➔", use_container_width=True):
-                st.session_state.pop("m1_1_status", None)
-                st.session_state.step = "m1_2_theory"
-                st.rerun()
+        if st.button("🔄 Try Again", use_container_width=True):
+            st.session_state.m1_1_status = None
+            st.rerun()
 
 # --- Module 1.2: Debit Cards vs. Credit Cards ---
 elif st.session_state.step == "m1_2_theory":
+    if st.button("⬅ Back"):
+        st.session_state.step = "m1_1_quiz"
+        st.rerun()
+        
     st.caption("Level 1: Financial Foundations | Module 1.2")
     st.header("Module 1.2: Debit Cards vs. Credit Cards")
     st.info("🎯 **Pedagogical Objective:** Understand the difference between spending your own money and using borrowed bank money.")
@@ -341,26 +315,20 @@ elif st.session_state.step == "m1_2_theory":
     * **Annual Percentage Rate (APR Risk):** If you don't repay the full credit card bill on time, the bank charges you very high extra fees (interest). What started as an easy buy can quickly turn into dangerous debt.
     """)
     
-    col_b, col_n, col_s = st.columns([1, 2, 1])
-    with col_b:
-        if st.button("⬅ Back", use_container_width=True):
-            st.session_state.step = "m1_1_quiz"
-            st.rerun()
-    with col_n:
-        if st.button("Complete & Checkpoint (+10 XP)", use_container_width=True):
-            if "m1_2_theory" not in st.session_state.completed_steps:
-                st.session_state.xp += 10
-                st.session_state.completed_steps.add("m1_2_theory")
-            st.session_state.step = "m1_2_quiz"
-            st.session_state.pop("m1_2_status", None)
-            st.rerun()
-    with col_s:
-        if st.button("Next (0 XP) ➔", use_container_width=True):
-            st.session_state.step = "m1_2_quiz"
-            st.session_state.pop("m1_2_status", None)
-            st.rerun()
+    if st.button("Proceed to Checkpoint 1.2 (+10 XP) ➔", use_container_width=True):
+        if "m1_2_theory" not in st.session_state.completed_steps:
+            st.session_state.xp += 10
+            st.session_state.completed_steps.add("m1_2_theory")
+        st.session_state.step = "m1_2_quiz"
+        st.session_state.pop("m1_2_status", None)
+        st.rerun()
 
 elif st.session_state.step == "m1_2_quiz":
+    if st.button("⬅ Back"):
+        st.session_state.pop("m1_2_status", None)
+        st.session_state.step = "m1_2_theory"
+        st.rerun()
+        
     st.caption("Checkpoint 1.2 | Debit Cards vs. Credit Cards")
     st.header("Knowledge Checkpoint 1.2")
     st.write("**Question:** What is the fundamental difference when executing a transaction with a credit card compared to a debit card?")
@@ -376,60 +344,36 @@ elif st.session_state.step == "m1_2_quiz":
         st.session_state.m1_2_status = None
         
     if st.session_state.m1_2_status is None:
-        col_b, col_s, col_nxt = st.columns([1, 2, 1])
-        with col_b:
-            if st.button("⬅ Back", use_container_width=True):
-                st.session_state.step = "m1_2_theory"
+        if st.button("Submit Answer", use_container_width=True):
+            if ans == correct:
+                st.session_state.m1_2_status = "correct"
+                if "m1_2_quiz" not in st.session_state.completed_steps:
+                    st.session_state.xp += 15
+                    st.session_state.completed_steps.add("m1_2_quiz")
+                st.toast("🎉 +15 XP Earned!", icon="✨")
                 st.rerun()
-        with col_s:
-            if st.button("Submit Answer", use_container_width=True):
-                if ans == correct:
-                    st.session_state.m1_2_status = "correct"
-                    if "m1_2_quiz" not in st.session_state.completed_steps:
-                        st.session_state.xp += 15
-                        st.session_state.completed_steps.add("m1_2_quiz")
-                    st.toast("🎉 +15 XP Earned!", icon="✨")
-                    st.rerun()
-                elif ans is not None:
-                    st.session_state.m1_2_status = "incorrect"
-                    st.rerun()
-        with col_nxt:
-            if st.button("Next (0 XP) ➔", use_container_width=True):
-                st.session_state.step = "m1_3_theory"
+            elif ans is not None:
+                st.session_state.m1_2_status = "incorrect"
                 st.rerun()
     elif st.session_state.m1_2_status == "correct":
         st.success("✅ **Correct!** Debit cards withdraw your own money immediately; credit cards draw from an institutional line of credit carrying high interest if unpaid.")
-        col_b, col_c = st.columns([1, 2])
-        with col_b:
-            if st.button("⬅ Back", use_container_width=True):
-                st.session_state.m1_2_status = None
-                st.session_state.step = "m1_2_theory"
-                st.rerun()
-        with col_c:
-            if st.button("Continue to Module 1.3 ➔", use_container_width=True):
-                st.session_state.pop("m1_2_status", None)
-                st.session_state.step = "m1_3_theory"
-                st.rerun()
+        if st.button("Continue to Module 1.3 ➔", use_container_width=True):
+            st.session_state.pop("m1_2_status", None)
+            st.session_state.step = "m1_3_theory"
+            st.rerun()
     elif st.session_state.m1_2_status == "incorrect":
         st.error("❌ **Incorrect Answer.**")
         st.info("💡 **Takeaway:** Credit cards allow short-term borrowing from the bank. If you carry a balance month-to-month, you pay punishing interest rates.")
-        col_b, col_r, col_nxt = st.columns([1, 2, 1])
-        with col_b:
-            if st.button("⬅ Back", use_container_width=True):
-                st.session_state.step = "m1_2_theory"
-                st.rerun()
-        with col_r:
-            if st.button("🔄 Try Again", use_container_width=True):
-                st.session_state.m1_2_status = None
-                st.rerun()
-        with col_nxt:
-            if st.button("Next (0 XP) ➔", use_container_width=True):
-                st.session_state.pop("m1_2_status", None)
-                st.session_state.step = "m1_3_theory"
-                st.rerun()
+        if st.button("🔄 Try Again", use_container_width=True):
+            st.session_state.m1_2_status = None
+            st.rerun()
 
 # --- Module 1.3: Digital Banking & Payment Security ---
 elif st.session_state.step == "m1_3_theory":
+    if st.button("⬅ Back"):
+        st.session_state.step = "m1_2_quiz"
+        st.rerun()
+        
     st.caption("Level 1: Financial Foundations | Module 1.3")
     st.header("Module 1.3: Digital Banking & Payment Security")
     st.info("🎯 **Pedagogical Objective:** Learn how to pay safely online and protect your digital money.")
@@ -439,26 +383,20 @@ elif st.session_state.step == "m1_3_theory":
     * **Credential Confidentiality & Phishing Defense:** Banks will **never** ask for your secret PIN, passwords, or SMS verification codes (OTPs) through text messages, emails, or strange links. Keep your login details strictly private.
     """)
     
-    col_b, col_n, col_s = st.columns([1, 2, 1])
-    with col_b:
-        if st.button("⬅ Back", use_container_width=True):
-            st.session_state.step = "m1_2_quiz"
-            st.rerun()
-    with col_n:
-        if st.button("Complete & Checkpoint (+10 XP)", use_container_width=True):
-            if "m1_3_theory" not in st.session_state.completed_steps:
-                st.session_state.xp += 10
-                st.session_state.completed_steps.add("m1_3_theory")
-            st.session_state.step = "m1_3_quiz"
-            st.session_state.pop("m1_3_status", None)
-            st.rerun()
-    with col_s:
-        if st.button("Next (0 XP) ➔", use_container_width=True):
-            st.session_state.step = "m1_3_quiz"
-            st.session_state.pop("m1_3_status", None)
-            st.rerun()
+    if st.button("Proceed to Checkpoint 1.3 (+10 XP) ➔", use_container_width=True):
+        if "m1_3_theory" not in st.session_state.completed_steps:
+            st.session_state.xp += 10
+            st.session_state.completed_steps.add("m1_3_theory")
+        st.session_state.step = "m1_3_quiz"
+        st.session_state.pop("m1_3_status", None)
+        st.rerun()
 
 elif st.session_state.step == "m1_3_quiz":
+    if st.button("⬅ Back"):
+        st.session_state.pop("m1_3_status", None)
+        st.session_state.step = "m1_3_theory"
+        st.rerun()
+        
     st.caption("Checkpoint 1.3 | Digital Banking Security")
     st.header("Knowledge Checkpoint 1.3")
     st.write("**Question:** What is a fundamental security rule when utilizing digital banking and payment cards?")
@@ -474,57 +412,29 @@ elif st.session_state.step == "m1_3_quiz":
         st.session_state.m1_3_status = None
         
     if st.session_state.m1_3_status is None:
-        col_b, col_s, col_nxt = st.columns([1, 2, 1])
-        with col_b:
-            if st.button("⬅ Back", use_container_width=True):
-                st.session_state.step = "m1_3_theory"
+        if st.button("Submit Answer", use_container_width=True):
+            if ans == correct:
+                st.session_state.m1_3_status = "correct"
+                if "m1_3_quiz" not in st.session_state.completed_steps:
+                    st.session_state.xp += 15
+                    st.session_state.completed_steps.add("m1_3_quiz")
+                st.toast("🎉 Level 1 Completed! +15 XP", icon="✨")
                 st.rerun()
-        with col_s:
-            if st.button("Submit Answer", use_container_width=True):
-                if ans == correct:
-                    st.session_state.m1_3_status = "correct"
-                    if "m1_3_quiz" not in st.session_state.completed_steps:
-                        st.session_state.xp += 15
-                        st.session_state.completed_steps.add("m1_3_quiz")
-                    st.toast("🎉 Level 1 Completed! +15 XP", icon="✨")
-                    st.rerun()
-                elif ans is not None:
-                    st.session_state.m1_3_status = "incorrect"
-                    st.rerun()
-        with col_nxt:
-            if st.button("Next (0 XP) ➔", use_container_width=True):
-                st.session_state.step = "m2_1_theory"
+            elif ans is not None:
+                st.session_state.m1_3_status = "incorrect"
                 st.rerun()
     elif st.session_state.m1_3_status == "correct":
         st.success("✅ **Correct!** Banks will never demand your secret PIN or OTP codes. Guarding your credentials prevents unauthorized takeovers.")
-        col_b, col_c = st.columns([1, 2])
-        with col_b:
-            if st.button("⬅ Back", use_container_width=True):
-                st.session_state.m1_3_status = None
-                st.session_state.step = "m1_3_theory"
-                st.rerun()
-        with col_c:
-            if st.button("Proceed to Level 2 (Economic Mechanics) ➔", use_container_width=True):
-                st.session_state.pop("m1_3_status", None)
-                st.session_state.step = "m2_1_theory"
-                st.rerun()
+        if st.button("Proceed to Level 2 (Economic Mechanics) ➔", use_container_width=True):
+            st.session_state.pop("m1_3_status", None)
+            st.session_state.step = "m2_1_theory"
+            st.rerun()
     elif st.session_state.m1_3_status == "incorrect":
         st.error("❌ **Incorrect Answer.**")
         st.info("💡 **Takeaway:** Never disclose authentication codes or PINs. Legitimate financial institutions will never solicit this information via links or messages.")
-        col_b, col_r, col_nxt = st.columns([1, 2, 1])
-        with col_b:
-            if st.button("⬅ Back", use_container_width=True):
-                st.session_state.step = "m1_3_theory"
-                st.rerun()
-        with col_r:
-            if st.button("🔄 Try Again", use_container_width=True):
-                st.session_state.m1_3_status = None
-                st.rerun()
-        with col_nxt:
-            if st.button("Next (0 XP) ➔", use_container_width=True):
-                st.session_state.pop("m1_3_status", None)
-                st.session_state.step = "m2_1_theory"
-                st.rerun()
+        if st.button("🔄 Try Again", use_container_width=True):
+            st.session_state.m1_3_status = None
+            st.rerun()
 
 # ==============================================================================
 # LEVEL 2: Core Economic Mechanics
@@ -532,6 +442,10 @@ elif st.session_state.step == "m1_3_quiz":
 
 # --- Module 2.1: Interest Rates & Borrowing ---
 elif st.session_state.step == "m2_1_theory":
+    if st.button("⬅ Back"):
+        st.session_state.step = "m1_3_quiz"
+        st.rerun()
+        
     st.caption("Level 2: Core Economic Mechanics | Module 2.1")
     st.header("Module 2.1: Interest Rates & Borrowing")
     st.info("🎯 **Pedagogical Objective:** Understand how interest works: as an extra fee when you borrow, and as a reward when you save.")
@@ -545,26 +459,20 @@ elif st.session_state.step == "m2_1_theory":
         * **Destructive Debt:** High-interest borrowing for things that lose value right away, like clothes or gadgets you cannot afford (e.g., unpaid credit card balances).
     """)
     
-    col_b, col_n, col_s = st.columns([1, 2, 1])
-    with col_b:
-        if st.button("⬅ Back", use_container_width=True):
-            st.session_state.step = "m1_3_quiz"
-            st.rerun()
-    with col_n:
-        if st.button("Complete & Checkpoint (+10 XP)", use_container_width=True):
-            if "m2_1_theory" not in st.session_state.completed_steps:
-                st.session_state.xp += 10
-                st.session_state.completed_steps.add("m2_1_theory")
-            st.session_state.step = "m2_1_quiz"
-            st.session_state.pop("m2_1_status", None)
-            st.rerun()
-    with col_s:
-        if st.button("Next (0 XP) ➔", use_container_width=True):
-            st.session_state.step = "m2_1_quiz"
-            st.session_state.pop("m2_1_status", None)
-            st.rerun()
+    if st.button("Proceed to Checkpoint 2.1 (+10 XP) ➔", use_container_width=True):
+        if "m2_1_theory" not in st.session_state.completed_steps:
+            st.session_state.xp += 10
+            st.session_state.completed_steps.add("m2_1_theory")
+        st.session_state.step = "m2_1_quiz"
+        st.session_state.pop("m2_1_status", None)
+        st.rerun()
 
 elif st.session_state.step == "m2_1_quiz":
+    if st.button("⬅ Back"):
+        st.session_state.pop("m2_1_status", None)
+        st.session_state.step = "m2_1_theory"
+        st.rerun()
+        
     st.caption("Checkpoint 2.1 | Interest Rates & Borrowing")
     st.header("Knowledge Checkpoint 2.1")
     st.write("**Question:** In the context of personal finance, what does the interest rate represent to a borrower?")
@@ -580,60 +488,36 @@ elif st.session_state.step == "m2_1_quiz":
         st.session_state.m2_1_status = None
         
     if st.session_state.m2_1_status is None:
-        col_b, col_s, col_nxt = st.columns([1, 2, 1])
-        with col_b:
-            if st.button("⬅ Back", use_container_width=True):
-                st.session_state.step = "m2_1_theory"
+        if st.button("Submit Answer", use_container_width=True):
+            if ans == correct:
+                st.session_state.m2_1_status = "correct"
+                if "m2_1_quiz" not in st.session_state.completed_steps:
+                    st.session_state.xp += 15
+                    st.session_state.completed_steps.add("m2_1_quiz")
+                st.toast("🎉 +15 XP Earned!", icon="✨")
                 st.rerun()
-        with col_s:
-            if st.button("Submit Answer", use_container_width=True):
-                if ans == correct:
-                    st.session_state.m2_1_status = "correct"
-                    if "m2_1_quiz" not in st.session_state.completed_steps:
-                        st.session_state.xp += 15
-                        st.session_state.completed_steps.add("m2_1_quiz")
-                    st.toast("🎉 +15 XP Earned!", icon="✨")
-                    st.rerun()
-                elif ans is not None:
-                    st.session_state.m2_1_status = "incorrect"
-                    st.rerun()
-        with col_nxt:
-            if st.button("Next (0 XP) ➔", use_container_width=True):
-                st.session_state.step = "m2_2_theory"
+            elif ans is not None:
+                st.session_state.m2_1_status = "incorrect"
                 st.rerun()
     elif st.session_state.m2_1_status == "correct":
         st.success("✅ **Correct!** For borrowers, interest is the cost of renting capital. Minimizing high-interest borrowing protects personal wealth.")
-        col_b, col_c = st.columns([1, 2])
-        with col_b:
-            if st.button("⬅ Back", use_container_width=True):
-                st.session_state.m2_1_status = None
-                st.session_state.step = "m2_1_theory"
-                st.rerun()
-        with col_c:
-            if st.button("Continue to Module 2.2 ➔", use_container_width=True):
-                st.session_state.pop("m2_1_status", None)
-                st.session_state.step = "m2_2_theory"
-                st.rerun()
+        if st.button("Continue to Module 2.2 ➔", use_container_width=True):
+            st.session_state.pop("m2_1_status", None)
+            st.session_state.step = "m2_2_theory"
+            st.rerun()
     elif st.session_state.m2_1_status == "incorrect":
         st.error("❌ **Incorrect Answer.**")
         st.info("💡 **Takeaway:** Interest is neither a gift nor a general tax; it is the direct fee charged by lenders for granting credit.")
-        col_b, col_r, col_nxt = st.columns([1, 2, 1])
-        with col_b:
-            if st.button("⬅ Back", use_container_width=True):
-                st.session_state.step = "m2_1_theory"
-                st.rerun()
-        with col_r:
-            if st.button("🔄 Try Again", use_container_width=True):
-                st.session_state.m2_1_status = None
-                st.rerun()
-        with col_nxt:
-            if st.button("Next (0 XP) ➔", use_container_width=True):
-                st.session_state.pop("m2_1_status", None)
-                st.session_state.step = "m2_2_theory"
-                st.rerun()
+        if st.button("🔄 Try Again", use_container_width=True):
+            st.session_state.m2_1_status = None
+            st.rerun()
 
 # --- Module 2.2: The Mechanics of Inflation ---
 elif st.session_state.step == "m2_2_theory":
+    if st.button("⬅ Back"):
+        st.session_state.step = "m2_1_quiz"
+        st.rerun()
+        
     st.caption("Level 2: Core Economic Mechanics | Module 2.2")
     st.header("Module 2.2: The Mechanics of Inflation")
     st.info("🎯 **Pedagogical Objective:** Understand how rising prices quietly reduce what your money can actually buy over time.")
@@ -646,26 +530,20 @@ elif st.session_state.step == "m2_2_theory":
         * Storing cash idle without investing it means it gradually buys fewer and fewer things.
     """)
     
-    col_b, col_n, col_s = st.columns([1, 2, 1])
-    with col_b:
-        if st.button("⬅ Back", use_container_width=True):
-            st.session_state.step = "m2_1_quiz"
-            st.rerun()
-    with col_n:
-        if st.button("Complete & Checkpoint (+10 XP)", use_container_width=True):
-            if "m2_2_theory" not in st.session_state.completed_steps:
-                st.session_state.xp += 10
-                st.session_state.completed_steps.add("m2_2_theory")
-            st.session_state.step = "m2_2_quiz"
-            st.session_state.pop("m2_2_status", None)
-            st.rerun()
-    with col_s:
-        if st.button("Next (0 XP) ➔", use_container_width=True):
-            st.session_state.step = "m2_2_quiz"
-            st.session_state.pop("m2_2_status", None)
-            st.rerun()
+    if st.button("Proceed to Checkpoint 2.2 (+10 XP) ➔", use_container_width=True):
+        if "m2_2_theory" not in st.session_state.completed_steps:
+            st.session_state.xp += 10
+            st.session_state.completed_steps.add("m2_2_theory")
+        st.session_state.step = "m2_2_quiz"
+        st.session_state.pop("m2_2_status", None)
+        st.rerun()
 
 elif st.session_state.step == "m2_2_quiz":
+    if st.button("⬅ Back"):
+        st.session_state.pop("m2_2_status", None)
+        st.session_state.step = "m2_2_theory"
+        st.rerun()
+        
     st.caption("Checkpoint 2.2 | Mechanics of Inflation")
     st.header("Knowledge Checkpoint 2.2")
     st.write("**Question:** If annual inflation averages 4% while cash remains stored uninvested at 0% return, what occurs to your capital over time?")
@@ -681,60 +559,36 @@ elif st.session_state.step == "m2_2_quiz":
         st.session_state.m2_2_status = None
         
     if st.session_state.m2_2_status is None:
-        col_b, col_s, col_nxt = st.columns([1, 2, 1])
-        with col_b:
-            if st.button("⬅ Back", use_container_width=True):
-                st.session_state.step = "m2_2_theory"
+        if st.button("Submit Answer", use_container_width=True):
+            if ans == correct:
+                st.session_state.m2_2_status = "correct"
+                if "m2_2_quiz" not in st.session_state.completed_steps:
+                    st.session_state.xp += 15
+                    st.session_state.completed_steps.add("m2_2_quiz")
+                st.toast("🎉 +15 XP Earned!", icon="✨")
                 st.rerun()
-        with col_s:
-            if st.button("Submit Answer", use_container_width=True):
-                if ans == correct:
-                    st.session_state.m2_2_status = "correct"
-                    if "m2_2_quiz" not in st.session_state.completed_steps:
-                        st.session_state.xp += 15
-                        st.session_state.completed_steps.add("m2_2_quiz")
-                    st.toast("🎉 +15 XP Earned!", icon="✨")
-                    st.rerun()
-                elif ans is not None:
-                    st.session_state.m2_2_status = "incorrect"
-                    st.rerun()
-        with col_nxt:
-            if st.button("Next (0 XP) ➔", use_container_width=True):
-                st.session_state.step = "m2_3_theory"
+            elif ans is not None:
+                st.session_state.m2_2_status = "incorrect"
                 st.rerun()
     elif st.session_state.m2_2_status == "correct":
         st.success("✅ **Correct!** Inflation quietly erodes what nominal money can actually buy in the real economy.")
-        col_b, col_c = st.columns([1, 2])
-        with col_b:
-            if st.button("⬅ Back", use_container_width=True):
-                st.session_state.m2_2_status = None
-                st.session_state.step = "m2_2_theory"
-                st.rerun()
-        with col_c:
-            if st.button("Continue to Module 2.3 ➔", use_container_width=True):
-                st.session_state.pop("m2_2_status", None)
-                st.session_state.step = "m2_3_theory"
-                st.rerun()
+        if st.button("Continue to Module 2.3 ➔", use_container_width=True):
+            st.session_state.pop("m2_2_status", None)
+            st.session_state.step = "m2_3_theory"
+            st.rerun()
     elif st.session_state.m2_2_status == "incorrect":
         st.error("❌ **Incorrect Answer.**")
         st.info("💡 **Takeaway:** Even though nominal cash figures stay constant, rising prices mean cash buys less over time (loss of purchasing power).")
-        col_b, col_r, col_nxt = st.columns([1, 2, 1])
-        with col_b:
-            if st.button("⬅ Back", use_container_width=True):
-                st.session_state.step = "m2_2_theory"
-                st.rerun()
-        with col_r:
-            if st.button("🔄 Try Again", use_container_width=True):
-                st.session_state.m2_2_status = None
-                st.rerun()
-        with col_nxt:
-            if st.button("Next (0 XP) ➔", use_container_width=True):
-                st.session_state.pop("m2_2_status", None)
-                st.session_state.step = "m2_3_theory"
-                st.rerun()
+        if st.button("🔄 Try Again", use_container_width=True):
+            st.session_state.m2_2_status = None
+            st.rerun()
 
 # --- Module 2.3: Compounding – Exponential Wealth Creation ---
 elif st.session_state.step == "m2_3_theory":
+    if st.button("⬅ Back"):
+        st.session_state.step = "m2_2_quiz"
+        st.rerun()
+        
     st.caption("Level 2: Core Economic Mechanics | Module 2.3")
     st.header("Module 2.3: Compounding – Exponential Wealth Creation")
     st.info("🎯 **Pedagogical Objective:** Understand how reinvesting your profits makes your money grow faster and faster over time (snowball effect).")
@@ -746,26 +600,20 @@ elif st.session_state.step == "m2_3_theory":
     * **The Time Horizon Trajectory:** Leaving your money invested over long periods (10–30 years) creates massive growth. Starting at age 18 instead of 35 allows this snowball to grow dramatically bigger with much less effort.
     """)
     
-    col_b, col_n, col_s = st.columns([1, 2, 1])
-    with col_b:
-        if st.button("⬅ Back", use_container_width=True):
-            st.session_state.step = "m2_2_quiz"
-            st.rerun()
-    with col_n:
-        if st.button("Complete & Checkpoint (+10 XP)", use_container_width=True):
-            if "m2_3_theory" not in st.session_state.completed_steps:
-                st.session_state.xp += 10
-                st.session_state.completed_steps.add("m2_3_theory")
-            st.session_state.step = "m2_3_quiz"
-            st.session_state.pop("m2_3_status", None)
-            st.rerun()
-    with col_s:
-        if st.button("Next (0 XP) ➔", use_container_width=True):
-            st.session_state.step = "m2_3_quiz"
-            st.session_state.pop("m2_3_status", None)
-            st.rerun()
+    if st.button("Proceed to Checkpoint 2.3 (+10 XP) ➔", use_container_width=True):
+        if "m2_3_theory" not in st.session_state.completed_steps:
+            st.session_state.xp += 10
+            st.session_state.completed_steps.add("m2_3_theory")
+        st.session_state.step = "m2_3_quiz"
+        st.session_state.pop("m2_3_status", None)
+        st.rerun()
 
 elif st.session_state.step == "m2_3_quiz":
+    if st.button("⬅ Back"):
+        st.session_state.pop("m2_3_status", None)
+        st.session_state.step = "m2_3_theory"
+        st.rerun()
+        
     st.caption("Checkpoint 2.3 | Exponential Compounding")
     st.header("Knowledge Checkpoint 2.3")
     st.write("**Question:** Why is compound interest considered one of the most powerful mechanisms in personal wealth accumulation?")
@@ -781,57 +629,29 @@ elif st.session_state.step == "m2_3_quiz":
         st.session_state.m2_3_status = None
         
     if st.session_state.m2_3_status is None:
-        col_b, col_s, col_nxt = st.columns([1, 2, 1])
-        with col_b:
-            if st.button("⬅ Back", use_container_width=True):
-                st.session_state.step = "m2_3_theory"
+        if st.button("Submit Answer", use_container_width=True):
+            if ans == correct:
+                st.session_state.m2_3_status = "correct"
+                if "m2_3_quiz" not in st.session_state.completed_steps:
+                    st.session_state.xp += 15
+                    st.session_state.completed_steps.add("m2_3_quiz")
+                st.toast("🎉 Level 2 Completed! +15 XP", icon="✨")
                 st.rerun()
-        with col_s:
-            if st.button("Submit Answer", use_container_width=True):
-                if ans == correct:
-                    st.session_state.m2_3_status = "correct"
-                    if "m2_3_quiz" not in st.session_state.completed_steps:
-                        st.session_state.xp += 15
-                        st.session_state.completed_steps.add("m2_3_quiz")
-                    st.toast("🎉 Level 2 Completed! +15 XP", icon="✨")
-                    st.rerun()
-                elif ans is not None:
-                    st.session_state.m2_3_status = "incorrect"
-                    st.rerun()
-        with col_nxt:
-            if st.button("Next (0 XP) ➔", use_container_width=True):
-                st.session_state.step = "m3_1_theory"
+            elif ans is not None:
+                st.session_state.m2_3_status = "incorrect"
                 st.rerun()
     elif st.session_state.m2_3_status == "correct":
         st.success("✅ **Correct!** Reinvesting accumulated returns creates a compounding snowball effect over extended investment horizons.")
-        col_b, col_c = st.columns([1, 2])
-        with col_b:
-            if st.button("⬅ Back", use_container_width=True):
-                st.session_state.m2_3_status = None
-                st.session_state.step = "m2_3_theory"
-                st.rerun()
-        with col_c:
-            if st.button("Proceed to Level 3 (Investment Principles) ➔", use_container_width=True):
-                st.session_state.pop("m2_3_status", None)
-                st.session_state.step = "m3_1_theory"
-                st.rerun()
+        if st.button("Proceed to Level 3 (Investment Principles) ➔", use_container_width=True):
+            st.session_state.pop("m2_3_status", None)
+            st.session_state.step = "m3_1_theory"
+            st.rerun()
     elif st.session_state.m2_3_status == "incorrect":
         st.error("❌ **Incorrect Answer.**")
         st.info("💡 **Takeaway:** Compounding powers exponential growth because returns generate their own returns when left invested over time.")
-        col_b, col_r, col_nxt = st.columns([1, 2, 1])
-        with col_b:
-            if st.button("⬅ Back", use_container_width=True):
-                st.session_state.step = "m2_3_theory"
-                st.rerun()
-        with col_r:
-            if st.button("🔄 Try Again", use_container_width=True):
-                st.session_state.m2_3_status = None
-                st.rerun()
-        with col_nxt:
-            if st.button("Next (0 XP) ➔", use_container_width=True):
-                st.session_state.pop("m2_3_status", None)
-                st.session_state.step = "m3_1_theory"
-                st.rerun()
+        if st.button("🔄 Try Again", use_container_width=True):
+            st.session_state.m2_3_status = None
+            st.rerun()
 
 # ==============================================================================
 # LEVEL 3: Investment Principles & Portfolio Theory
@@ -839,6 +659,10 @@ elif st.session_state.step == "m2_3_quiz":
 
 # --- Module 3.1: Equity Shares vs. Fixed-Income Bonds ---
 elif st.session_state.step == "m3_1_theory":
+    if st.button("⬅ Back"):
+        st.session_state.step = "m2_3_quiz"
+        st.rerun()
+        
     st.caption("Level 3: Investment Principles & Portfolio Theory | Module 3.1")
     st.header("Module 3.1: Equity Shares vs. Fixed-Income Bonds")
     st.info("🎯 **Pedagogical Objective:** Understand the difference between owning a piece of a company (stocks) and lending money for interest (bonds).")
@@ -848,26 +672,20 @@ elif st.session_state.step == "m3_1_theory":
     * **Fixed-Income Bonds (Debt Obligations):** A bond is an official loan certificate. Instead of buying ownership, you lend your money to a government or a large company. In return, they officially promise to pay you regular interest and return your full money back on a set date.
     """)
     
-    col_b, col_n, col_s = st.columns([1, 2, 1])
-    with col_b:
-        if st.button("⬅ Back", use_container_width=True):
-            st.session_state.step = "m2_3_quiz"
-            st.rerun()
-    with col_n:
-        if st.button("Complete & Checkpoint (+10 XP)", use_container_width=True):
-            if "m3_1_theory" not in st.session_state.completed_steps:
-                st.session_state.xp += 10
-                st.session_state.completed_steps.add("m3_1_theory")
-            st.session_state.step = "m3_1_quiz"
-            st.session_state.pop("m3_1_status", None)
-            st.rerun()
-    with col_s:
-        if st.button("Next (0 XP) ➔", use_container_width=True):
-            st.session_state.step = "m3_1_quiz"
-            st.session_state.pop("m3_1_status", None)
-            st.rerun()
+    if st.button("Proceed to Checkpoint 3.1 (+10 XP) ➔", use_container_width=True):
+        if "m3_1_theory" not in st.session_state.completed_steps:
+            st.session_state.xp += 10
+            st.session_state.completed_steps.add("m3_1_theory")
+        st.session_state.step = "m3_1_quiz"
+        st.session_state.pop("m3_1_status", None)
+        st.rerun()
 
 elif st.session_state.step == "m3_1_quiz":
+    if st.button("⬅ Back"):
+        st.session_state.pop("m3_1_status", None)
+        st.session_state.step = "m3_1_theory"
+        st.rerun()
+        
     st.caption("Checkpoint 3.1 | Equities vs. Bonds")
     st.header("Knowledge Checkpoint 3.1")
     st.write("**Question:** What core legal and economic distinction separates a stock from a government bond?")
@@ -883,60 +701,36 @@ elif st.session_state.step == "m3_1_quiz":
         st.session_state.m3_1_status = None
         
     if st.session_state.m3_1_status is None:
-        col_b, col_s, col_nxt = st.columns([1, 2, 1])
-        with col_b:
-            if st.button("⬅ Back", use_container_width=True):
-                st.session_state.step = "m3_1_theory"
+        if st.button("Submit Answer", use_container_width=True):
+            if ans == correct:
+                st.session_state.m3_1_status = "correct"
+                if "m3_1_quiz" not in st.session_state.completed_steps:
+                    st.session_state.xp += 15
+                    st.session_state.completed_steps.add("m3_1_quiz")
+                st.toast("🎉 +15 XP Earned!", icon="✨")
                 st.rerun()
-        with col_s:
-            if st.button("Submit Answer", use_container_width=True):
-                if ans == correct:
-                    st.session_state.m3_1_status = "correct"
-                    if "m3_1_quiz" not in st.session_state.completed_steps:
-                        st.session_state.xp += 15
-                        st.session_state.completed_steps.add("m3_1_quiz")
-                    st.toast("🎉 +15 XP Earned!", icon="✨")
-                    st.rerun()
-                elif ans is not None:
-                    st.session_state.m3_1_status = "incorrect"
-                    st.rerun()
-        with col_nxt:
-            if st.button("Next (0 XP) ➔", use_container_width=True):
-                st.session_state.step = "m3_2_theory"
+            elif ans is not None:
+                st.session_state.m3_1_status = "incorrect"
                 st.rerun()
     elif st.session_state.m3_1_status == "correct":
         st.success("✅ **Correct!** Equity provides ownership rights and variable upside, while bonds constitute debt contracts paying predetermined coupons.")
-        col_b, col_c = st.columns([1, 2])
-        with col_b:
-            if st.button("⬅ Back", use_container_width=True):
-                st.session_state.m3_1_status = None
-                st.session_state.step = "m3_1_theory"
-                st.rerun()
-        with col_c:
-            if st.button("Continue to Module 3.2 ➔", use_container_width=True):
-                st.session_state.pop("m3_1_status", None)
-                st.session_state.step = "m3_2_theory"
-                st.rerun()
+        if st.button("Continue to Module 3.2 ➔", use_container_width=True):
+            st.session_state.pop("m3_1_status", None)
+            st.session_state.step = "m3_2_theory"
+            st.rerun()
     elif st.session_state.m3_1_status == "incorrect":
         st.error("❌ **Incorrect Answer.**")
         st.info("💡 **Takeaway:** Shares represent company ownership (equity), while bonds represent contractual loans provided to issuers (debt).")
-        col_b, col_r, col_nxt = st.columns([1, 2, 1])
-        with col_b:
-            if st.button("⬅ Back", use_container_width=True):
-                st.session_state.step = "m3_1_theory"
-                st.rerun()
-        with col_r:
-            if st.button("🔄 Try Again", use_container_width=True):
-                st.session_state.m3_1_status = None
-                st.rerun()
-        with col_nxt:
-            if st.button("Next (0 XP) ➔", use_container_width=True):
-                st.session_state.pop("m3_1_status", None)
-                st.session_state.step = "m3_2_theory"
-                st.rerun()
+        if st.button("🔄 Try Again", use_container_width=True):
+            st.session_state.m3_1_status = None
+            st.rerun()
 
 # --- Module 3.2: The Risk-Return Spectrum ---
 elif st.session_state.step == "m3_2_theory":
+    if st.button("⬅ Back"):
+        st.session_state.step = "m3_1_quiz"
+        st.rerun()
+        
     st.caption("Level 3: Investment Principles & Portfolio Theory | Module 3.2")
     st.header("Module 3.2: The Risk-Return Spectrum")
     st.info("🎯 **Pedagogical Objective:** Learn why aiming for higher profits always means accepting bigger ups and downs (and risk of loss).")
@@ -946,26 +740,20 @@ elif st.session_state.step == "m3_2_theory":
     * **The Trade-Off Axiom:** Higher potential profits always go hand-in-hand with higher risk. If an investment can make you a lot of money quickly, it can also lose a lot just as fast. Anyone promising 'huge guaranteed profits with zero risk' is pitching an unrealistic claim.
     """)
     
-    col_b, col_n, col_s = st.columns([1, 2, 1])
-    with col_b:
-        if st.button("⬅ Back", use_container_width=True):
-            st.session_state.step = "m3_1_quiz"
-            st.rerun()
-    with col_n:
-        if st.button("Complete & Checkpoint (+10 XP)", use_container_width=True):
-            if "m3_2_theory" not in st.session_state.completed_steps:
-                st.session_state.xp += 10
-                st.session_state.completed_steps.add("m3_2_theory")
-            st.session_state.step = "m3_2_quiz"
-            st.session_state.pop("m3_2_status", None)
-            st.rerun()
-    with col_s:
-        if st.button("Next (0 XP) ➔", use_container_width=True):
-            st.session_state.step = "m3_2_quiz"
-            st.session_state.pop("m3_2_status", None)
-            st.rerun()
+    if st.button("Proceed to Checkpoint 3.2 (+10 XP) ➔", use_container_width=True):
+        if "m3_2_theory" not in st.session_state.completed_steps:
+            st.session_state.xp += 10
+            st.session_state.completed_steps.add("m3_2_theory")
+        st.session_state.step = "m3_2_quiz"
+        st.session_state.pop("m3_2_status", None)
+        st.rerun()
 
 elif st.session_state.step == "m3_2_quiz":
+    if st.button("⬅ Back"):
+        st.session_state.pop("m3_2_status", None)
+        st.session_state.step = "m3_2_theory"
+        st.rerun()
+        
     st.caption("Checkpoint 3.2 | Risk-Return Trade-Off")
     st.header("Knowledge Checkpoint 3.2")
     st.write("**Question:** According to the foundational Risk-Return trade-off principle in financial economics:")
@@ -981,60 +769,36 @@ elif st.session_state.step == "m3_2_quiz":
         st.session_state.m3_2_status = None
         
     if st.session_state.m3_2_status is None:
-        col_b, col_s, col_nxt = st.columns([1, 2, 1])
-        with col_b:
-            if st.button("⬅ Back", use_container_width=True):
-                st.session_state.step = "m3_2_theory"
+        if st.button("Submit Answer", use_container_width=True):
+            if ans == correct:
+                st.session_state.m3_2_status = "correct"
+                if "m3_2_quiz" not in st.session_state.completed_steps:
+                    st.session_state.xp += 15
+                    st.session_state.completed_steps.add("m3_2_quiz")
+                st.toast("🎉 +15 XP Earned!", icon="✨")
                 st.rerun()
-        with col_s:
-            if st.button("Submit Answer", use_container_width=True):
-                if ans == correct:
-                    st.session_state.m3_2_status = "correct"
-                    if "m3_2_quiz" not in st.session_state.completed_steps:
-                        st.session_state.xp += 15
-                        st.session_state.completed_steps.add("m3_2_quiz")
-                    st.toast("🎉 +15 XP Earned!", icon="✨")
-                    st.rerun()
-                elif ans is not None:
-                    st.session_state.m3_2_status = "incorrect"
-                    st.rerun()
-        with col_nxt:
-            if st.button("Next (0 XP) ➔", use_container_width=True):
-                st.session_state.step = "m3_3_theory"
+            elif ans is not None:
+                st.session_state.m3_2_status = "incorrect"
                 st.rerun()
     elif st.session_state.m3_2_status == "correct":
         st.success("✅ **Correct!** Risk and return are intrinsically linked: superior potential return demands accepting higher short-term uncertainty.")
-        col_b, col_c = st.columns([1, 2])
-        with col_b:
-            if st.button("⬅ Back", use_container_width=True):
-                st.session_state.m3_2_status = None
-                st.session_state.step = "m3_2_theory"
-                st.rerun()
-        with col_c:
-            if st.button("Continue to Module 3.3 ➔", use_container_width=True):
-                st.session_state.pop("m3_2_status", None)
-                st.session_state.step = "m3_3_theory"
-                st.rerun()
+        if st.button("Continue to Module 3.3 ➔", use_container_width=True):
+            st.session_state.pop("m3_2_status", None)
+            st.session_state.step = "m3_3_theory"
+            st.rerun()
     elif st.session_state.m3_2_status == "incorrect":
         st.error("❌ **Incorrect Answer.**")
         st.info("💡 **Takeaway:** Higher returns are the economic compensation for enduring greater downside volatility and capital risk.")
-        col_b, col_r, col_nxt = st.columns([1, 2, 1])
-        with col_b:
-            if st.button("⬅ Back", use_container_width=True):
-                st.session_state.step = "m3_2_theory"
-                st.rerun()
-        with col_r:
-            if st.button("🔄 Try Again", use_container_width=True):
-                st.session_state.m3_2_status = None
-                st.rerun()
-        with col_nxt:
-            if st.button("Next (0 XP) ➔", use_container_width=True):
-                st.session_state.pop("m3_2_status", None)
-                st.session_state.step = "m3_3_theory"
-                st.rerun()
+        if st.button("🔄 Try Again", use_container_width=True):
+            st.session_state.m3_2_status = None
+            st.rerun()
 
 # --- Module 3.3: Portfolio Diversification & Asset Allocation ---
 elif st.session_state.step == "m3_3_theory":
+    if st.button("⬅ Back"):
+        st.session_state.step = "m3_2_quiz"
+        st.rerun()
+        
     st.caption("Level 3: Investment Principles & Portfolio Theory | Module 3.3")
     st.header("Module 3.3: Portfolio Diversification & Asset Allocation")
     st.info("🎯 **Pedagogical Objective:** Learn why spreading your money across different investments protects you from losing everything (don't put all your eggs in one basket).")
@@ -1044,26 +808,20 @@ elif st.session_state.step == "m3_3_theory":
     * **Unsystematic Risk Mitigation:** By mixing different types of investments (like company stocks, government bonds, and cash), bad news in one area won't destroy your whole balance. While markets will always have ups and downs, you completely avoid total ruin from a single company failure.
     """)
     
-    col_b, col_n, col_s = st.columns([1, 2, 1])
-    with col_b:
-        if st.button("⬅ Back", use_container_width=True):
-            st.session_state.step = "m3_2_quiz"
-            st.rerun()
-    with col_n:
-        if st.button("Complete & Checkpoint (+10 XP)", use_container_width=True):
-            if "m3_3_theory" not in st.session_state.completed_steps:
-                st.session_state.xp += 10
-                st.session_state.completed_steps.add("m3_3_theory")
-            st.session_state.step = "m3_3_quiz"
-            st.session_state.pop("m3_3_status", None)
-            st.rerun()
-    with col_s:
-        if st.button("Next (0 XP) ➔", use_container_width=True):
-            st.session_state.step = "m3_3_quiz"
-            st.session_state.pop("m3_3_status", None)
-            st.rerun()
+    if st.button("Proceed to Checkpoint 3.3 (+10 XP) ➔", use_container_width=True):
+        if "m3_3_theory" not in st.session_state.completed_steps:
+            st.session_state.xp += 10
+            st.session_state.completed_steps.add("m3_3_theory")
+        st.session_state.step = "m3_3_quiz"
+        st.session_state.pop("m3_3_status", None)
+        st.rerun()
 
 elif st.session_state.step == "m3_3_quiz":
+    if st.button("⬅ Back"):
+        st.session_state.pop("m3_3_status", None)
+        st.session_state.step = "m3_3_theory"
+        st.rerun()
+        
     st.caption("Checkpoint 3.3 | Portfolio Diversification")
     st.header("Knowledge Checkpoint 3.3")
     st.write("**Question:** What is the primary architectural purpose of diversifying a multi-asset portfolio?")
@@ -1079,57 +837,29 @@ elif st.session_state.step == "m3_3_quiz":
         st.session_state.m3_3_status = None
         
     if st.session_state.m3_3_status is None:
-        col_b, col_s, col_nxt = st.columns([1, 2, 1])
-        with col_b:
-            if st.button("⬅ Back", use_container_width=True):
-                st.session_state.step = "m3_3_theory"
+        if st.button("Submit Answer", use_container_width=True):
+            if ans == correct:
+                st.session_state.m3_3_status = "correct"
+                if "m3_3_quiz" not in st.session_state.completed_steps:
+                    st.session_state.xp += 15
+                    st.session_state.completed_steps.add("m3_3_quiz")
+                st.toast("🎉 Level 3 Completed! +15 XP", icon="✨")
                 st.rerun()
-        with col_s:
-            if st.button("Submit Answer", use_container_width=True):
-                if ans == correct:
-                    st.session_state.m3_3_status = "correct"
-                    if "m3_3_quiz" not in st.session_state.completed_steps:
-                        st.session_state.xp += 15
-                        st.session_state.completed_steps.add("m3_3_quiz")
-                    st.toast("🎉 Level 3 Completed! +15 XP", icon="✨")
-                    st.rerun()
-                elif ans is not None:
-                    st.session_state.m3_3_status = "incorrect"
-                    st.rerun()
-        with col_nxt:
-            if st.button("Next (0 XP) ➔", use_container_width=True):
-                st.session_state.step = "level_4_intro"
+            elif ans is not None:
+                st.session_state.m3_3_status = "incorrect"
                 st.rerun()
     elif st.session_state.m3_3_status == "correct":
         st.success("✅ **Correct!** Diversification neutralizes unsystematic (single-company) vulnerability without sacrificing expected risk-adjusted returns.")
-        col_b, col_c = st.columns([1, 2])
-        with col_b:
-            if st.button("⬅ Back", use_container_width=True):
-                st.session_state.m3_3_status = None
-                st.session_state.step = "m3_3_theory"
-                st.rerun()
-        with col_c:
-            if st.button("Proceed to Level 4 (Behavioral Evaluation) ➔", use_container_width=True):
-                st.session_state.pop("m3_3_status", None)
-                st.session_state.step = "level_4_intro"
-                st.rerun()
+        if st.button("Proceed to Level 4 (Behavioral Evaluation) ➔", use_container_width=True):
+            st.session_state.pop("m3_3_status", None)
+            st.session_state.step = "level_4_intro"
+            st.rerun()
     elif st.session_state.m3_3_status == "incorrect":
         st.error("❌ **Incorrect Answer.**")
         st.info("💡 **Takeaway:** Diversification shields wealth against company-specific defaults, even though macro market cycles affect overall assets.")
-        col_b, col_r, col_nxt = st.columns([1, 2, 1])
-        with col_b:
-            if st.button("⬅ Back", use_container_width=True):
-                st.session_state.step = "m3_3_theory"
-                st.rerun()
-        with col_r:
-            if st.button("🔄 Try Again", use_container_width=True):
-                st.session_state.m3_3_status = None
-                st.rerun()
-        with col_nxt:
-            if st.button("Next (0 XP) ➔", use_container_width=True):
-                st.session_state.pop("m3_3_status", None)
-                st.session_state.step = "level_4_intro"
-                st.rerun()
+        if st.button("🔄 Try Again", use_container_width=True):
+            st.session_state.m3_3_status = None
+            st.rerun()
 
 # ==============================================================================
 # LEVEL 4: Diagnostic Behavioral Bias Screening (ΜΟΝΟΣΗΜΑΝΤΗ ΡΟΗ - ΧΩΡΙΣ BACK)
