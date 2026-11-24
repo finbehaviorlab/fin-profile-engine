@@ -32,7 +32,7 @@ st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 # 3. ΡΥΘΜΙΣΗ ΒΑΣΗΣ ΔΕΔΟΜΕΝΩΝ (SQLITE)
 # ==========================================
 def init_db():
-    conn = sqlite3.connect("quiz_data.db")
+    conn = sqlite3.connect("quiz_data.db", timeout=15)
     c = conn.cursor()
     c.execute("""
         CREATE TABLE IF NOT EXISTS user_results (
